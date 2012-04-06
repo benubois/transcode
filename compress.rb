@@ -7,14 +7,14 @@ include FileUtils
 class Converter
   def initialize
     @job_queue = []
-    @rip_directory = "/Users/ben/Desktop/Rip"
-    @export_directory = "/Users/ben/Desktop/Export"
+    @rip_directory = "/Users/bb/Movies"
+    @export_directory = "/Users/bb/Desktop/Export"
     @handbrake = "HandBrakeCLI"
     @rips = get_rip_info
     
     queue_jobs
     
-    puts @job_queue[0]
+    # puts @job_queue[0]
   end
   
   def get_rip_info
@@ -38,17 +38,41 @@ class Converter
         next
       elsif rip[:info].include?("Main Feature")
         @job_queue.push(encode(rip[:path], Shellwords.escape(rip[:name]), true))
+      else
+        titles = rip[:info].scan(/^\+ title ([\d]+):/)
+        pp titles
       end
+      
       
     end
   end
   
   def info(path)
-    `#{@handbrake} -i #{path} -t 0 2>&1`
+    `#{@handbrake} -i #{path} -t 0 --min-duration 1200 2>&1`
   end
   
   def encode(input, output_file, feature = nil, title = nil)
-    base = "#{@handbrake} -i #{input} -o #{@export_directory}/#{output_file}.m4v -e x264 -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 stereo,auto -R Auto,Auto -D 2.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50 --native-language eng --subtitle scan --subtitle-forced=1"
+    base = "#{@handbrake} 
+    -i #{input} 
+    -o #{@export_directory}/#{output_file}.m4v 
+    -e x264 
+    -q 20.0 
+    -a 1,1 
+    -E faac,copy:ac3 
+    -B 160,160 
+    -6 stereo,auto 
+    -R Auto,Auto 
+    -D 2.0,0.0 
+    -f mp4 
+    -4 
+    --detelecine 
+    --decomb 
+    --loose-anamorphic 
+    -m 
+    -x b-adapt=2:rc-lookahead=50 
+    --native-language eng 
+    --subtitle scan 
+    --subtitle-forced=1"
     
     if feature.nil?
       return base + " -t #{title}"
