@@ -3,8 +3,8 @@ require File.expand_path('../lib/transcode/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Ben Ubois"]
-  gem.email         = ["bb@flickerbox.com"]
-  gem.description   = %q{TODO: Write a gem description}
+  gem.email         = ["ben@benubois.com"]
+  gem.description   = %q{Transcode DVDs to M4Vs.}
   gem.summary       = %q{TODO: Write a gem summary}
   gem.homepage      = ""
 
@@ -14,4 +14,8 @@ Gem::Specification.new do |gem|
   gem.name          = "transcode"
   gem.require_paths = ["lib"]
   gem.version       = Transcode::VERSION
+  
+  gem.add_dependency "sinatra"
+  gem.add_dependency "resque"
+  
 end
