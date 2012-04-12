@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
-
-# Specify your gem's dependencies in transcode.gemspec
-gemspec
+gem "sinatra"
+gem "resque"
+gem 'foreman'
+gem 'thin'
