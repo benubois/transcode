@@ -7,9 +7,6 @@ include FileUtils
 class Converter
   def initialize
     @job_queue = []
-    @rip_directory = "/Users/bb/Movies"
-    @export_directory = "/Users/bb/Desktop/Export"
-    @handbrake = "HandBrakeCLI"
     @rips = get_rip_info
     
     queue_jobs
