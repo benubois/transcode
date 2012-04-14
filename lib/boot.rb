@@ -9,6 +9,6 @@ require 'resque/tasks'
 require 'fileutils'
 
 require 'transcode'
-require 'transcode/scan'
+require 'transcode/watch'
 
 include FileUtils
