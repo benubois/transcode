@@ -29,9 +29,7 @@ module Transcode
     end
     
     def self.convert(args)
-      
       output = "#{Transcode.config.exports}/#{args['name']}.m4v"
-      
       base = "#{Transcode.config.handbrake} -i #{Shellwords.escape(args['path'])} -o #{Shellwords.escape(output)} -e x264 -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 stereo,auto -R Auto,Auto -D 2.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50 --native-language eng --subtitle scan --subtitle-forced=1"
     
       if args.has_key?('feature') && args['feature']
