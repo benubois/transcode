@@ -31,7 +31,8 @@ module Transcode
     end
     
     def enqueue_scan(name)
-      puts name
+      puts "Queueing #{name}"
+      Resque.enqueue(Scan, name)
     end
     
   end

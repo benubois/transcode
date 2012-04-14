@@ -4,11 +4,17 @@ require 'rubygems'
 require 'bundler'
 Bundler.setup
 
-require 'fssm'
-require 'resque/tasks'
 require 'fileutils'
+require 'shellwords'
+
+require 'fssm'
+require 'resque'
+require 'resque/tasks'
 
 require 'transcode'
+require 'transcode/handbrake'
+require 'transcode/convert'
+require 'transcode/scan'
 require 'transcode/watch'
 
 include FileUtils
