@@ -13,5 +13,6 @@ end
 
 desc "Start the directory watch process"
 task :watch do
-  Transcode::Watch.start
+  watch = Transcode::Watch.new
+  watch.start
 end

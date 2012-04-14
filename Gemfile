@@ -3,4 +3,4 @@ gem "sinatra"
 gem "resque"
 gem 'foreman'
 gem 'thin'
-gem 'listen'
+gem 'fssm'

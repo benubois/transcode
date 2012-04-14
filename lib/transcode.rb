@@ -1,9 +1,9 @@
 module Transcode
   def self.config
     OpenStruct.new \
-      :rip_directory    => yaml['rip_directory'],
-      :export_directory => yaml['export_directory'],
-      :handbrake        => yaml['handbrake']
+      :rips      => File.expand_path(yaml['rips']),
+      :exports   => File.expand_path(yaml['exports']),
+      :handbrake => yaml['handbrake']
   end
 
   def self.yaml

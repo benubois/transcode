@@ -4,8 +4,11 @@ require 'rubygems'
 require 'bundler'
 Bundler.setup
 
-require 'listen'
+require 'fssm'
 require 'resque/tasks'
+require 'fileutils'
 
 require 'transcode'
 require 'transcode/watch'
+
+include FileUtils
