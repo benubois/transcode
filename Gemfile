@@ -4,4 +4,3 @@ gem "resque"
 gem 'foreman'
 gem 'thin'
 gem 'fssm'
-gem 'resque-status'
