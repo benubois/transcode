@@ -4,6 +4,7 @@ Bundler.setup
 
 require 'logger'
 require 'resque/server'
+require 'resque/status_server'
 
 use Rack::ShowExceptions
 

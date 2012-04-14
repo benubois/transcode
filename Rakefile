@@ -16,3 +16,9 @@ task :watch do
   watch = Transcode::Watch.new
   watch.start
 end
+
+desc "Start the progress reporter"
+task :progress do
+  progress = Transcode::Progress.new(nil)
+  progress.watch
+end

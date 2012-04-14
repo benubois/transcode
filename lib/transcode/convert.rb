@@ -1,9 +1,11 @@
 module Transcode
   class Convert
+    include Resque::Plugins::Status
+    
     @queue = :transcode_convert
 
-    def self.perform(args)
-      Handbrake.convert(args)
+    def perform
+      Handbrake.convert(options['args'], status['uuid'])
     end
     
   end
