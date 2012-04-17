@@ -2,7 +2,7 @@ module Transcode
   class Watch
     
     def start
-      FSSM.monitor(Transcode.config.rips, '**/*', :directories => true) do |path|
+      FSSM.monitor(Transcode.config.rips, '*', :directories => true) do |path|
         path.create do |base, relative, type|
           if is_movie_candidate?(relative, type)
             enqueue_scan(relative)
@@ -16,10 +16,6 @@ module Transcode
     def is_movie_candidate?(name, type)
       
       if name.include?('.ripit')
-        return false
-      end
-      
-      if name.include?('/')
         return false
       end
       
