@@ -81,6 +81,8 @@ module Transcode
         }
       end  
 
+      titles = titles.sort_by { |title| title[:title] }
+
       return titles
     end
     
