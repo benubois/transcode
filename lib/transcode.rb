@@ -1,4 +1,9 @@
 module Transcode
+  
+  def self.log
+    @log ||= Logger.new(File.expand_path(File.dirname(File.dirname(__FILE__))) + '/log/transcode.log')
+  end
+  
   def self.config
     OpenStruct.new \
       :rips      => File.expand_path(yaml['rips']),

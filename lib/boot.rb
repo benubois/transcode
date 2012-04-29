@@ -6,6 +6,7 @@ Bundler.setup
 
 require 'fileutils'
 require 'shellwords'
+require 'logger'
 
 require 'fssm'
 require 'resque'

@@ -2,6 +2,7 @@ module Transcode
   class Watch
     
     def start
+      Transcode.log.info("Started watching #{Transcode.config.rips}")
       FSSM.monitor(Transcode.config.rips, '*', :directories => true) do |path|
         path.create do |base, relative, type|
           if is_movie_candidate?(relative, type)
@@ -27,7 +28,7 @@ module Transcode
     end
     
     def enqueue_scan(name)
-      puts "Queueing #{name}"
+      Transcode.log.info("Queued #{name} for scan")
       Resque.enqueue(Scan, name)
     end
     

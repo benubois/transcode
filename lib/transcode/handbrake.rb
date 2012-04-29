@@ -8,6 +8,8 @@ module Transcode
       titles = title_scan(info)
       titles = extract_titles(titles)
       
+      Transcode.log.info("Extracted #{titles.inspect}")
+      
       titles.each do |title|
         
         args = {
@@ -20,6 +22,8 @@ module Transcode
           args['name'] += ".#{title[:title]}"
         end
         
+        Transcode.log.info("Queued #{args.inspect} for encode")
+        
         Resque.enqueue(Convert, args)
       end
       
@@ -28,13 +32,8 @@ module Transcode
     def self.convert(args)
       
       output = "#{Transcode.config.exports}/#{args['name']}.m4v"
-      base = "#{Transcode.config.handbrake} -i #{Shellwords.escape(args['path'])} -o #{Shellwords.escape(output)} -e x264 -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 stereo,auto -R Auto,Auto -D 2.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50 --native-language eng --subtitle scan --subtitle-forced=1"
-    
-      if args.has_key?('feature') && args['feature']
-        base = "#{base} --main-feature"
-      else  
-        base = "#{base} -t #{args['title']}"
-      end
+      
+      base = "#{Transcode.config.handbrake} -i #{Shellwords.escape(args['path'])} -o #{Shellwords.escape(output)} -t #{args['title']} -e x264 -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 stereo,auto -R Auto,Auto -D 2.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50 --native-language eng --subtitle scan --subtitle-forced=1"
       
       # Do the conversion
       `#{base} 2>&1`
@@ -80,8 +79,8 @@ module Transcode
           title_contains_blocks(candidate, titles, index)
         }
       end  
-
-      titles = titles.sort_by { |title| title[:title] }
+      
+        titles = titles.sort_by { |title| title[:title] }
 
       return titles
     end
