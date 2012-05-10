@@ -1,10 +1,10 @@
 # Transcode
 
-A Resque-backed HandBrake batch DVD transcoder. Transcode is built to make it as frictionless as possible to convert DVDs to iOS compatible, high quality M4V files. If transcode will also detect TV DVDs and attempt to split them up into episodes.
+A Resque-backed HandBrake batch DVD transcoder. Transcode is built to make it as frictionless as possible to convert DVDs to iOS compatible, high quality M4V files. Transcode will try to detect TV DVDs and attempt to split them up into episodes.
 
 ## Workflow
 
-Transcode assumes that DVDs are ripped with [RipIt](http://thelittleappfactory.com/ripit/). Configure RipIt to put movies into the same directory that transcode watches. Once the rip is complete, transcode will queue the encode job.
+Transcode assumes that DVDs are ripped with [RipIt](http://thelittleappfactory.com/ripit/). Once the rip is complete, Transcode will queue the encode job.
 
 ## Installation
 
@@ -12,15 +12,15 @@ Resque requires redis. The easiest way to install redis on the mac is by using h
 
     $ brew install redis
 
-Then to run transcode clone the repository:
+To run transcode clone the repository:
 
     $ git clone git://github.com/benubois/transcode.git && cd transcode
 
-Then use bundler to install dependencies
+… and use bundler to install dependencies
 
     $ bundle install
 
-Next add your settings. Transcode requires the paths to you DVD rip directory, a path for where to save the transcoded files and the path to the HandBrakeCLI executable if it is not on your $PATH. Rename the included config.example.yml to config.yml and add your settings.
+Rename the included config.example.yml to config.yml and add your settings. Transcode requires the path to you DVD rip directory and where to save the transcoded files. The path to the HandBrakeCLI executable can be added if it is not on your $PATH. Configure RipIt to save to the rips directory from config.yml.
 
 Finally, run the app using:
 
