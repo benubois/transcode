@@ -1,6 +1,6 @@
 # Transcode
 
-A Resque-backed HandBrake batch DVD transcoder. Transcode is built to make it as frictionless as possible to convert DVDs to iOS compatible, high quality M4V files. Transcode will try to detect TV DVDs and attempt to split them up into episodes.
+A Resque-backed HandBrake powered batch DVD transcoder. Transcode is built to make it as frictionless as possible to convert DVDs to iOS compatible, high quality M4V files. Transcode will try to detect TV DVDs and attempt to split them up into episodes.
 
 ## Workflow
 
