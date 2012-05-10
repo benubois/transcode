@@ -14,7 +14,7 @@ Resque requires redis. The easiest way to install redis on the mac is by using h
 
 To run transcode clone the repository:
 
-    $ git clone git://github.com/benubois/transcode.git && cd transcode
+    $ git clone https://github.com/benubois/transcode.git && cd transcode
 
 … and use bundler to install dependencies
 
