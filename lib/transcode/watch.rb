@@ -5,6 +5,7 @@ module Transcode
       Transcode.log.info("Started watching #{Transcode.config.rips}")
       FSSM.monitor(Transcode.config.rips, '*', :directories => true) do |path|
         path.create do |base, relative, type|
+          relative.force_encoding('UTF-8')
           if is_movie_candidate?(relative, type)
             enqueue_scan(relative)
           end
