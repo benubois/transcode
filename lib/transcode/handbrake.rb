@@ -71,8 +71,6 @@ module Transcode
   
       if 1 === titles.length
         titles = titles
-      elsif 2 === titles.length
-        titles = titles.keep_if { |title| title[:feature] }
       else
         # Probably a tv show, titles that contain all the same blocks as any of the other titles
         # These titles are usually the "Play All" titles
