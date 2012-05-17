@@ -1,3 +1,4 @@
+# encoding: UTF-8
 module Transcode
   class Scan
     @queue = :transcode_scan
