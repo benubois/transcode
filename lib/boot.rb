@@ -17,6 +17,7 @@ require 'resque/tasks'
 require 'resque/server'
 require 'rake'
 require 'sinatra/base'
+require 'mustache/sinatra'
 require 'fssm'
 
 require 'transcode'
@@ -25,7 +26,7 @@ require 'transcode/convert'
 require 'transcode/scan'
 require 'transcode/watch'
 require 'transcode/archive'
-require 'transcode/app'
+require 'app'
 
 include FileUtils
 
