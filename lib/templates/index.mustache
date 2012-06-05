@@ -1,12 +1,16 @@
 <h1>{{title}}</h1>
 
-<p>{{content}}</p>
+{{#movies}}
 
-<ul>
-  <li>
-    <a href="/other">The Other Page</a>
-  </li>
-  <li>
-    <a href="/nolayout">A Page Without a Layout</a>
-  </li>
-</ul>
+	<p>Path {{path}}</p>
+	
+	<p>Titles</p>
+	<ul>
+		{{#titles}}
+
+			<li>{{title}}</li>
+
+		{{/titles}}
+	</ul>
+
+{{/movies}}
