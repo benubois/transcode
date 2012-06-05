@@ -4,3 +4,6 @@ gem "resque"
 gem 'foreman'
 gem 'thin'
 gem 'fssm'
+gem 'mustache'
+gem 'redis'
+gem 'json'

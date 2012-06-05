@@ -6,8 +6,8 @@ module Transcode
       full_path = "#{Transcode.config.rips}/#{name}"
       info      = `#{Transcode.config.handbrake} -i #{Shellwords.escape(full_path)} -t 0 2>&1`
       
-      titles = title_scan(info)
-      titles = extract_titles(titles)
+      titles_all = title_scan(info)
+      titles = extract_titles(titles_all)
       
       Transcode.log.info("Extracted #{titles.inspect}")
       
@@ -28,6 +28,14 @@ module Transcode
         Resque.enqueue(Convert, args)
       end
       
+      # Add to scan archive
+      archive({'path' => full_path, 'name' => name, 'titles' => titles_all})
+      
+    end
+    
+    def archive(scan)
+      id = Digest::SHA1.hexdigest(scan['name'])
+      $redis.set "transcode:scan:#{id}", scan.to_json
     end
     
     def self.convert(args)
