@@ -1,3 +1,81 @@
+/*------------------------------------------------------------------------------
+ Structure
+------------------------------------------------------------------------------*/
 body {
-	font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
+	font-family: Helvetica;
+	background: #f4f5f7;
+}
+header {
+	background: #3174b3;
+	color: #FFF;
+}
+nav {
+	ul {
+		float: left;
+		margin: 0;
+		padding: 0;
+	}
+	li {
+		list-style-type: none;
+		display: inline;
+	}
+	a {
+		color: #fff;
+		text-decoration: none;
+		display: block;
+		float: left;
+		padding: 11px 10px;
+	}
+}
+.logo {
+	display: block;
+	float: left;
+	font-weight: bold;
+	margin-right: 20px;
+	padding: 8px 0 0 10px;
+	font-size: 18px;
+}
+.movies {
+	margin: 0;
+	padding: 0;
+	li {
+		padding: 10px 10px 0 10px;
+		list-style-type: none;
+		border-bottom: 1px solid #ddd;
+		font-weight: bold;
+	}
+	.titles {
+		padding: 5px 0 0 0;
+		a {
+			font-weight: normal;
+			font-family: Monaco;
+			background: -webkit-linear-gradient(#f6f7f8, #bcbfc8);
+			border-radius: 4px;
+			font-size: 12px;
+			display: block;
+			float: left;
+			padding: 5px;
+			margin: 0 0 10px 10px;
+			border: 1px solid #92949a;
+			color: #4f5459;
+			&.selected {
+				background: -webkit-linear-gradient(#bcbfc8, #f6f7f8);
+			}
+		}
+	}
+}
+.row {
+	margin-left: -10px;
+}
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before, .clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
 }

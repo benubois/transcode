@@ -5,26 +5,17 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/lib')
 require 'boot'
 require 'sprockets'
 
-stylesheets = Sprockets::Environment.new
-stylesheets.append_path ''
-
-javascripts = Sprockets::Environment.new
-javascripts.append_path ''
-
-use Rack::ShowExceptions
-
-
 map '/assets' do
   environment = Sprockets::Environment.new
-  environment.append_path 'app/frontend/scripts'
-  environment.append_path 'app/frontend/styles'
+  environment.append_path 'lib/frontend/scripts'
+  environment.append_path 'lib/frontend/styles'
   run environment
 end
 
-map '/' do
+map '/resque' do
   run Resque::Server.new
 end
 
-map '/manual' do
+map '/' do
   run Transcode::App.new
 end

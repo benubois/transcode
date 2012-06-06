@@ -18,5 +18,9 @@ module Transcode
       mustache :index
     end
     
+    post '/enqueue' do
+      title = JSON.parse($redis.get(params[:id]))
+    end
+    
   end
 end

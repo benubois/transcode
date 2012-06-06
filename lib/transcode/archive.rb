@@ -11,33 +11,37 @@ module Transcode
     end
     
     def self.get_list
-      keys    = $redis.keys("transcode:scan:*")
+      keys    = $redis.keys("transcode:disc:*")
 
       if keys.empty?
         []
       else
         values  = $redis.mget(*keys)
         values = values.map { |value| JSON.parse(value) }
-        list = Hash[*keys.zip(values).flatten]
-        list = cleanup(list)
-        list.values
+        discs = Hash[*keys.zip(values).flatten]
+        discs = cleanup(discs)
+        discs.values
       end
     end
     
-    def self.cleanup(scans)
+    def self.cleanup(discs)
       
-      scans.each do |key, scan|
-        unless File.exists? scan['path']
+      discs.each do |key, disc|
+        unless File.exists? disc['path']
           # Remove from redis
           $redis.del(key)
           
           # remove from scans
-          scans.delete(key)
+          discs.delete(key)
         end
       end
       
-      scans
+      discs
       
+    end
+    
+    def self.get(id)
+      JSON.parse($redis.get(id))
     end
     
   end

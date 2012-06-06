@@ -1,26 +1,50 @@
-# encoding: UTF-8
 module Transcode
   class Handbrake
     
     def scan(name)
-      full_path = "#{Transcode.config.rips}/#{name}"
-      info      = `#{Transcode.config.handbrake} -i #{Shellwords.escape(full_path)} -t 0 2>&1`
+      disc = {}
+      disc['name'] = name
+      disc['path'] = "#{Transcode.config.rips}/#{name}"
+      disc['titles'] = title_scan(`#{Transcode.config.handbrake} -i #{Shellwords.escape(disc['path'])} -t 0 2>&1`)
       
-      titles_all = title_scan(info)
-      titles = extract_titles(titles_all)
+      # Enqueue Possible titles
+      titles_to_convert = title_candidates(disc['titles'])
+      convert_enqueue(titles_to_convert, disc)
       
+      # Add to scan to archive
+      archive(disc, titles_to_convert)
+    end
+    
+    def archive(disc, titles_to_convert)
+      disc = mark_as_queued(disc, titles_to_convert)
+      disc['id'] = "transcode:disc:#{Digest::SHA1.hexdigest(disc['name'])}"
+      $redis.set disc['id'], disc.to_json
+    end
+    
+    def mark_as_queued(disc, titles_to_convert)
+      disc['titles'].each_with_index do |title, index|
+        if titles_to_convert.include?(title['title'])
+          disc['titles'][index]['queued'] = true
+        end
+      end
+      disc
+    end
+    
+    def convert_enqueue(titles, disc)
       Transcode.log.info("Extracted #{titles.inspect}")
       
+      unless titles.kind_of?(Array)
+        titles = [titles]
+      end
+      
       titles.each do |title|
-        
         args = {
-          'path'  => full_path,
-          'name'  => name,
-          'title' => title[:title]
+          'name'  => disc['name'],
+          'path'  => disc['path'],
+          'title' => title
         }
-        
         if titles.length > 1
-          args['name'] += ".#{title[:title]}"
+          args['name'] += ".#{title['title']}"
         end
         
         Transcode.log.info("Queued #{args.inspect} for encode")
@@ -28,14 +52,6 @@ module Transcode
         Resque.enqueue(Convert, args)
       end
       
-      # Add to scan archive
-      archive({'path' => full_path, 'name' => name, 'titles' => titles_all})
-      
-    end
-    
-    def archive(scan)
-      id = Digest::SHA1.hexdigest(scan['name'])
-      $redis.set "transcode:scan:#{id}", scan.to_json
     end
     
     def self.convert(args)
@@ -62,20 +78,23 @@ module Transcode
       titles.shift
   
       titles.map { |title|
+        timecode = title.match(/\+ duration: (.*)/)[1]
         {
-          :title    => title.match(/^([0-9]+):/)[1].to_i,
-          :duration => timecode_to_seconds(title.match(/\+ duration: (.*)/)[1]),
-          :feature  => title.include?('Main Feature'),
-          :blocks => title.scan(/([0-9]+) blocks,/).flatten.map{|block| block.to_i }
+          'title'    => title.match(/^([0-9]+):/)[1].to_i,
+          'duration' => timecode_to_seconds(timecode),
+          'timecode' => timecode,
+          'feature'  => title.include?('Main Feature'),
+          'queued'   => false,
+          'blocks'   =>   title.scan(/([0-9]+) blocks,/).flatten.map{|block| block.to_i }
         }
       }
     end
 
-    def extract_titles(titles)
+    def title_candidates(titles)
       # remove anything under 20 min
-      title = titles.delete_if { |title| title[:duration] < 1200 }
+      title = titles.delete_if { |title| title['duration'] < 1200 }
   
-      titles = titles.sort_by { |title| title[:duration] }.reverse
+      titles = titles.sort_by { |title| title['duration'] }.reverse
   
       if 1 === titles.length
         titles = titles
@@ -87,16 +106,15 @@ module Transcode
         }
       end  
       
-        titles = titles.sort_by { |title| title[:title] }
-
-      return titles
+      # Just return the title numbers
+      titles.sort_by { |title| title['title'] }.map { |title| title['title'] }
     end
     
     def title_contains_blocks(candidate, titles, index)
       test_group = titles.dup
       test_group.delete_at(index)
       test_group.each do |title|
-        return true if true === title[:blocks].all?{|block| candidate[:blocks].include?(block)}
+        return true if true === title['blocks'].all?{|block| candidate['blocks'].include?(block)}
       end
   
       return false

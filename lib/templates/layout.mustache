@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>
-      {{title}}
-    </title>
-	<link rel="stylesheet" href="/css/master.css" />
-  </head>
-  <body>
-    <div id="main">
-      {{{yield}}}
-    </div>
-  </body>
+<head>
+	<title>
+		{{title}}
+	</title>
+	<link rel="stylesheet" href="/assets/master.css" />
+	<script src="/assets/application.js"></script>
+</head>
+<body>
+	<header class="clearfix">
+		<strong class="logo">Transcode</strong>
+		<nav>
+			<ul>
+				<li><a href="XX">Queue</a></li>
+				<li><a href="XX">Archive</a></li>
+			</ul>
+		</nav>
+	</header>
+	<div id="main">
+		{{{yield}}}
+	</div>
+</body>
 </html>

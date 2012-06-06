@@ -1,16 +1,20 @@
-<h1>{{title}}</h1>
-
+<ul class="movies">
 {{#movies}}
-
-	<p>Path {{path}}</p>
-	
-	<p>Titles</p>
-	<ul>
-		{{#titles}}
-
-			<li>{{title}}</li>
-
-		{{/titles}}
-	</ul>
-
+	<li>
+		{{name}}
+		<div class="titles">
+			<div class="row clearfix">
+			{{#titles}}
+				<a 
+					data-id="{{id}}" 
+					data-title="{{title}}"
+					{{#queued}}class="selected"{{/queued}}
+				>
+					{{timecode}}
+				</a>
+			{{/titles}}
+			</div>
+		</div>
+	</li>
 {{/movies}}
+</ul>

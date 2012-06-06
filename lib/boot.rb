@@ -11,6 +11,8 @@ require 'logger'
 require 'digest/sha1'
 
 require 'json'
+require 'coffee-script'
+require 'sass'
 require 'redis'
 require 'resque'
 require 'resque/tasks'
