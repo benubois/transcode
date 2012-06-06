@@ -1,7 +1,7 @@
-require 'rubygems'
-require 'redis'
-require 'json'
-$redis = Redis.connect(:url => 'redis://127.0.0.1', :thread_safe => true)
+# require 'rubygems'
+# require 'redis'
+# require 'json'
+# $redis = Redis.connect(:url => 'redis://127.0.0.1', :thread_safe => true)
 
 module Transcode
   class Archive
@@ -20,6 +20,7 @@ module Transcode
         values = values.map { |value| JSON.parse(value) }
         list = Hash[*keys.zip(values).flatten]
         list = cleanup(list)
+        list.values
       end
     end
     
@@ -41,5 +42,3 @@ module Transcode
     
   end
 end
-
-Transcode::Archive.list
