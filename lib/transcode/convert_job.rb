@@ -1,6 +1,6 @@
 # encoding: UTF-8
 module Transcode
-  class Convert
+  class ConvertJob
 
     @queue = :transcode_convert
 

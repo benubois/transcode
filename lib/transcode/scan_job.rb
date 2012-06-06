@@ -1,6 +1,6 @@
 # encoding: UTF-8
 module Transcode
-  class Scan
+  class ScanJob
     @queue = :transcode_scan
 
     def self.perform(rip_path)

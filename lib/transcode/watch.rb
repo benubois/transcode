@@ -30,7 +30,7 @@ module Transcode
     
     def enqueue_scan(name)
       Transcode.log.info("Queued #{name} for scan")
-      Resque.enqueue(Scan, name)
+      Resque.enqueue(ScanJob, name)
     end
     
   end

@@ -49,7 +49,7 @@ module Transcode
         
         Transcode.log.info("Queued #{args.inspect} for encode")
         
-        Resque.enqueue(Convert, args)
+        Resque.enqueue(ConvertJob, args)
       end
       
     end
