@@ -1,0 +1,20 @@
+<ul class="movies">
+{{#movies}}
+	<li>
+		{{name}}
+		<div class="titles">
+			<div class="row clearfix">
+			{{#titles}}
+				<a 
+					data-id="{{id}}" 
+					data-title="{{title}}"
+					{{#queued}}class="selected"{{/queued}}
+				>
+					{{timecode}}
+				</a>
+			{{/titles}}
+			</div>
+		</div>
+	</li>
+{{/movies}}
+</ul>

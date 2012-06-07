@@ -18,12 +18,18 @@ module Transcode
       mustache :index
     end
     
+    get '/history' do
+      mustache :history
+    end
+    
     post '/enqueue' do
       disc = History.get(params[:id])
       title = params[:title].to_i
       History.delete(params[:id])
       History.add(disc, [title])
-      # Job.convert_enqueue(title, disc)
+      Job.convert_enqueue(title, disc)
+      content_type :json
+      { :success => true }.to_json
     end
     
   end

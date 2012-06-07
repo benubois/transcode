@@ -37,6 +37,16 @@ nav {
 	padding: 8px 0 0 10px;
 	font-size: 18px;
 }
+.queue {
+	margin: 0;
+	padding: 0;
+	li {
+		padding: 10px 10px 10px 10px;
+		list-style-type: none;
+		border-bottom: 1px solid #ddd;
+		font-weight: bold;
+	}
+}
 .movies {
 	margin: 0;
 	padding: 0;
