@@ -25,7 +25,6 @@ module Transcode
     end
     
     def self.cleanup(discs)
-      
       discs.each do |key, disc|
         unless File.exists? disc['path']
           # Remove from redis

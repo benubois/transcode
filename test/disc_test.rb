@@ -1,13 +1,14 @@
-require 'minitest/autorun'
+require File.expand_path("../helper", __FILE__)
 
-class TestDisc < MiniTest::Unit::TestCase
-  def setup
-    @disc = Disc.new
+describe Disc do
+  before do
+    @disc = Transcode::Disc.new
+    @scan = scan
   end
   
-  def test_disc_has_titles
-    @disc.info(rip_path)
-    
-    assert_equal 0, @register.total
+  it "has titles" do
+    scan = @disc.title_scan(@scan)
+    scan.wont_be_empty
   end
+
 end

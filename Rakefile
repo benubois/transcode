@@ -23,12 +23,9 @@ task :progress do
   progress.watch
 end
 
-desc "Run tests"
-task :test do
-	require 'rake/testtask'
-	Rake::TestTask.new do |t|
-		t.libs.push "lib"
-		t.test_files = FileList['test/*_test.rb']
-		t.verbose = true
-	end
+require 'rake/testtask'
+Rake::TestTask.new(:test) do |test|
+  test.libs.push 'lib'
+  test.pattern = 'test/*_test.rb'
+  test.verbose = true
 end

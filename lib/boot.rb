@@ -23,7 +23,7 @@ require 'mustache/sinatra'
 require 'fssm'
 
 require 'transcode'
-require 'transcode/handbrake'
+require 'transcode/disc'
 require 'transcode/convert_job'
 require 'transcode/scan_job'
 require 'transcode/watch'
