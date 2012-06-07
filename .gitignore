@@ -17,4 +17,3 @@ test/version_tmp
 tmp
 vendor
 config/transcode.yml
-log/*
