@@ -1,5 +1,5 @@
 module Transcode
-  class Handbrake
+  class Disc
     
     def scan(name)
       disc = {}
@@ -13,6 +13,14 @@ module Transcode
       
       # Add to scan to archive
       archive(disc, titles_to_convert)
+    end
+    
+    def info(name)
+      disc = {}
+      disc['name'] = name
+      disc['path'] = "#{Transcode.config.rips}/#{name}"
+      disc['titles'] = title_scan(`#{Transcode.config.handbrake} -i #{Shellwords.escape(disc['path'])} -t 0 2>&1`)
+      disc
     end
     
     def archive(disc, titles_to_convert)

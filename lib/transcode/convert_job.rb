@@ -5,7 +5,7 @@ module Transcode
     @queue = :transcode_convert
 
     def self.perform(args)
-      Handbrake.convert(args)
+      Disc.convert(args)
     end
     
   end

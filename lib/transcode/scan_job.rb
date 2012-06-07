@@ -5,7 +5,7 @@ module Transcode
 
     def self.perform(rip_path)
       rip_path.force_encoding('UTF-8')
-      hb = Handbrake.new
+      hb = Disc.new
       hb.scan(rip_path)
     end
     
