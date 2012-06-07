@@ -2,9 +2,8 @@ module Transcode
   module Views
     class Index < Layout
       
-      
       def movies
-        Transcode::Archive.list
+        History.list
       end
       
     end

@@ -23,11 +23,12 @@ require 'mustache/sinatra'
 require 'fssm'
 
 require 'transcode'
+require 'transcode/job'
 require 'transcode/disc'
 require 'transcode/convert_job'
 require 'transcode/scan_job'
 require 'transcode/watch'
-require 'transcode/archive'
+require 'transcode/history'
 require 'app'
 
 include FileUtils

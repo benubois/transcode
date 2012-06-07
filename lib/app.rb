@@ -19,7 +19,11 @@ module Transcode
     end
     
     post '/enqueue' do
-      title = JSON.parse($redis.get(params[:id]))
+      disc = History.get(params[:id])
+      title = params[:title].to_i
+      History.delete(params[:id])
+      History.add(disc, [title])
+      # Job.convert_enqueue(title, disc)
     end
     
   end

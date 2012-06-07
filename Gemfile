@@ -3,7 +3,7 @@ gem "sinatra"
 gem "resque"
 gem 'foreman'
 gem 'thin'
-gem 'fssm'
+gem 'fssm', '0.2.8.1'
 gem 'mustache'
 gem 'redis'
 gem 'json'

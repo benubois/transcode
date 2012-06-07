@@ -1,65 +1,12 @@
 module Transcode
   class Disc
     
-    def scan(name)
-      disc = {}
-      disc['name'] = name
-      disc['path'] = "#{Transcode.config.rips}/#{name}"
-      disc['titles'] = title_scan(`#{Transcode.config.handbrake} -i #{Shellwords.escape(disc['path'])} -t 0 2>&1`)
-      
-      # Enqueue Possible titles
-      titles_to_convert = title_candidates(disc['titles'])
-      convert_enqueue(titles_to_convert, disc)
-      
-      # Add to scan to archive
-      archive(disc, titles_to_convert)
-    end
-    
     def info(name)
       disc = {}
       disc['name'] = name
       disc['path'] = "#{Transcode.config.rips}/#{name}"
       disc['titles'] = title_scan(`#{Transcode.config.handbrake} -i #{Shellwords.escape(disc['path'])} -t 0 2>&1`)
       disc
-    end
-    
-    def archive(disc, titles_to_convert)
-      disc = mark_as_queued(disc, titles_to_convert)
-      disc['id'] = "transcode:disc:#{Digest::SHA1.hexdigest(disc['name'])}"
-      $redis.set disc['id'], disc.to_json
-    end
-    
-    def mark_as_queued(disc, titles_to_convert)
-      disc['titles'].each_with_index do |title, index|
-        if titles_to_convert.include?(title['title'])
-          disc['titles'][index]['queued'] = true
-        end
-      end
-      disc
-    end
-    
-    def convert_enqueue(titles, disc)
-      Transcode.log.info("Extracted #{titles.inspect}")
-      
-      unless titles.kind_of?(Array)
-        titles = [titles]
-      end
-      
-      titles.each do |title|
-        args = {
-          'name'  => disc['name'],
-          'path'  => disc['path'],
-          'title' => title
-        }
-        if titles.length > 1
-          args['name'] += ".#{title['title']}"
-        end
-        
-        Transcode.log.info("Queued #{args.inspect} for encode")
-        
-        Resque.enqueue(ConvertJob, args)
-      end
-      
     end
     
     def self.convert(args)
@@ -78,7 +25,7 @@ module Transcode
     end
 
     def title_scan(disc)
-      return ''
+
       # split by title and 
       titles = disc.split(/^\+ title /m)
 
