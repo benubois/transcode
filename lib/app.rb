@@ -23,7 +23,9 @@ module Transcode
     end
     
     post '/enqueue' do
-      Job.convert_enqueue(nil, params[:id], params[:title].to_i)
+      titles = Job.prepare_titles(nil, params[:id], params[:title].to_i)
+      Job.convert_enqueue(titles)
+      
       content_type :json
       { :success => true }.to_json
     end

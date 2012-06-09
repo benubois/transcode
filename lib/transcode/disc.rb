@@ -5,8 +5,14 @@ module Transcode
       disc = {}
       disc['name'] = name
       disc['path'] = "#{Transcode.config.rips}/#{name}"
-      disc['titles'] = title_scan(`#{Transcode.config.handbrake} -i #{Shellwords.escape(disc['path'])} -t 0 2>&1`)
+      titles = utf8_clean(`#{Transcode.config.handbrake} -i #{Shellwords.escape(disc['path'])} -t 0 2>&1`)
+      disc['titles'] = title_scan(titles)
       disc
+    end
+    
+    def utf8_clean(data)
+      ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
+      ic.iconv(data + ' ')[0..-2]
     end
     
     def self.convert(args)

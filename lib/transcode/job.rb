@@ -1,8 +1,7 @@
 module Transcode
   class Job
     
-    def self.convert_enqueue(disc_name = nil, id = nil, title = nil)
-      
+    def self.prepare_titles(disc_name = nil, id = nil, title = nil)
       if disc_name
         # Get disc info
         disc = Disc.new
@@ -14,24 +13,41 @@ module Transcode
         History.delete(id)
       end
       
+      titles_to_transcode = []
+      
       titles.each do |title|
         args = {
           'name'  => disc_info['name'],
           'path'  => disc_info['path'],
           'title' => title
         }
+
         if titles.length > 1
-          args['name'] += ".#{title['title']}"
+          args['name'] += ".#{title.to_s}"
         end
         
-        Transcode.log.info("Queued #{args.inspect} for encode")
+        titles_to_transcode.push(args)
         
-        Resque.enqueue(ConvertJob, args)
+      end
+      
+      return {
+        'titles_to_transcode' => titles_to_transcode,
+        'titles' => titles,
+        'disc_info' => disc_info
+      }
+      
+    end
+    
+    def self.convert_enqueue(prepared_titles)
+      
+      prepared_titles['titles_to_transcode'].each do |title|
+        Resque.enqueue(ConvertJob, title)
+        Transcode.log.info("Queued #{title.inspect} for encode")
       end
       
       # Add to scan to archive
-      unless titles.empty?
-        History.add(disc_info, titles)
+      unless prepared_titles['titles'].empty?
+        History.add(prepared_titles['disc_info'], prepared_titles['titles'])
       end
       
     end

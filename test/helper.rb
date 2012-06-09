@@ -5,7 +5,8 @@ require 'minitest/autorun'
 
 def scan
   if File.exist?(File.dirname(__FILE__) + '/data/scan.txt')
-    IO.read(File.dirname(__FILE__) + '/data/scan.txt')
+    disc = Disc.new
+    disc.utf8_clean(IO.read(File.dirname(__FILE__) + '/data/scan.txt'))
   else
     ''
   end
@@ -18,12 +19,13 @@ def seed
 	info['name'] = 'DVD Name'
 	info['path'] = "#{Transcode.config.rips}/#{info['name']}"
 	info['titles'] = disc.title_scan(scan)
+  
+  puts info.inspect
 	
 	Transcode::History.add(info, [1])
 end
 
 def purge
-  puts 'purge'
 	keys    = $redis.keys("transcode*")
 	keys.each { |key| Transcode::History.delete(key) }
 end

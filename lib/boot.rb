@@ -9,6 +9,7 @@ require 'fileutils'
 require 'shellwords'
 require 'logger'
 require 'digest/sha1'
+require 'iconv'
 
 require 'json'
 require 'coffee-script'

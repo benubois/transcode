@@ -4,7 +4,8 @@ module Transcode
     @queue = :transcode_scan
 
     def self.perform(disc_name)
-      Job.convert_enqueue(disc_name)
+      titles = Job.prepare_titles(disc_name)
+      Job.convert_enqueue(titles)
     end
     
   end

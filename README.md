@@ -8,7 +8,7 @@ Transcode assumes that DVDs are ripped with [RipIt](http://thelittleappfactory.c
 
 ## Installation
 
-Resque requires redis. The easiest way to install redis on the mac is by using homebrew.
+Resque requires redis. The easiest way to install redis on the Mac is by using homebrew.
 
     $ brew install redis
 
@@ -26,7 +26,9 @@ Finally, run the app using:
 
     $ rake start
 
-The Resque frontend will be available at [localhost:5050](http://localhost:5050)
+## Front-end
+The transcode front-end will be available at [localhost:5050](http://localhost:5050). Here you'll be able to view you queue, add titles to be transcoded and remove discs when they are complete.
 
 ## HandBrake Conversion Settings
 Transcode uses HandBrakeCLI to transcode video from DVD to H.264 encoded m4v. The settings are the same as the High Profile option with a few additions to include forced subtitles.
+
