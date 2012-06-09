@@ -23,11 +23,13 @@ module Transcode
     end
     
     post '/enqueue' do
-      disc = History.get(params[:id])
-      title = params[:title].to_i
-      History.delete(params[:id])
-      History.add(disc, [title])
-      Job.convert_enqueue(title, disc)
+      Job.convert_enqueue(nil, params[:id], params[:title].to_i)
+      content_type :json
+      { :success => true }.to_json
+    end
+    
+    delete '/disc/:id' do |id|
+      Disc.delete(id)
       content_type :json
       { :success => true }.to_json
     end

@@ -5,6 +5,8 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/lib')
 require 'boot'
 require 'sprockets'
 
+use Rack::MethodOverride
+
 map '/assets' do
   environment = Sprockets::Environment.new
   environment.append_path 'lib/frontend/scripts'
