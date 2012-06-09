@@ -1,9 +1,18 @@
 $(document).ready () ->
-
-  $('.titles').on 'click', 'a:not(.selected)', (e) ->
-    clickedButton = $(this)
+  
+  $('.movies').on 'click', 'a:not(.selected)', (e) ->
+    $(@).addClass('selected')
     params = 
-      id: clickedButton.data('id')
-      title: clickedButton.data('title')
-    $.post "/enqueue", params, (response) ->
-      clickedButton.addClass('selected') if response.success is true
+      id: $(@).data('id')
+      title: $(@).data('title')
+    $.post "/enqueue", params      
+    e.preventDefault()
+  
+  $('.movies').on 'click', 'button', (e) ->
+    form = $(@).parents('form')
+    $(@).parents('li').hide('fast', () -> $(@).remove())
+    $.ajax
+      type: form.attr('method'),
+      url: form.attr('action'),
+      data: form.serialize(),
+    e.preventDefault()

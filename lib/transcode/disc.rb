@@ -74,6 +74,15 @@ module Transcode
   
       return false
     end
+    
+    def self.delete(id)
+      disc = History.get(id)
+      # Remove from filesystem
+      FileUtils.rm_rf(disc['path'])
+      
+      # Remove from history
+      History.delete(id)
+    end
 
   end
 end

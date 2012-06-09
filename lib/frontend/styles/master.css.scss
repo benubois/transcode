@@ -7,6 +7,10 @@ body {
 	font-family: Helvetica;
 	background: #f4f5f7;
 }
+body,a {
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+	
+}
 header {
 	background: #3174b3;
 	color: #FFF;
@@ -51,10 +55,16 @@ nav {
 	margin: 0;
 	padding: 0;
 	li {
-		padding: 10px 10px 0 10px;
+		padding: 10px 20px 0 10px;
 		list-style-type: none;
 		border-bottom: 1px solid #ddd;
 		font-weight: bold;
+		position: relative;
+		.delete {
+			position: absolute;
+			top: 8px;
+			right: 10px;
+		}
 	}
 	.titles {
 		padding: 5px 0 0 0;

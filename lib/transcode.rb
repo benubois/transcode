@@ -7,9 +7,10 @@ module Transcode
   
   def self.config
     OpenStruct.new \
-      :rips      => File.expand_path(yaml['rips']),
-      :exports   => File.expand_path(yaml['exports']),
-      :handbrake => yaml['handbrake']
+      :rips            => File.expand_path(yaml['rips']),
+      :exports         => File.expand_path(yaml['exports']),
+      :handbrake       => yaml['handbrake'],
+      :redis_namespace => 'transcode:disc:'
   end
 
   def self.yaml
