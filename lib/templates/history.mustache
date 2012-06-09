@@ -2,6 +2,12 @@
 {{#movies}}
 	<li>
 		{{name}}
+		<div class="delete">
+			<form action="/disc/{{id}}" method="post">
+			    <input name="_method" type="hidden" value="delete" />
+				<button>Delete</button>
+			</form>
+		</div>
 		<div class="titles">
 			<div class="row clearfix">
 			{{#titles}}

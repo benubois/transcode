@@ -2,7 +2,7 @@ module Transcode
   class History
     
     def self.list
-      keys    = $redis.keys("transcode:disc:*")
+      keys    = $redis.keys("#{Transcode.config.redis_namespace}*")
       
       if keys.empty?
         []
@@ -11,8 +11,6 @@ module Transcode
         values = values.map { |value| JSON.parse(value) }
         discs = Hash[*keys.zip(values).flatten]
         discs = cleanup(discs)
-        
-        
         discs.values
       end
     end
@@ -41,12 +39,16 @@ module Transcode
     
     def self.add(disc, titles_to_convert)
       disc = mark_as_queued(disc, titles_to_convert)
-      disc['id'] = "transcode:disc:#{Digest::SHA1.hexdigest(disc['name'])}"
+      disc['id'] = get_id(disc['name'])
       $redis.set disc['id'], disc.to_json
     end
     
-    def self.delete(key)
-      $redis.del(key)
+    def self.get_id(name)
+      Transcode.config.redis_namespace + Digest::SHA1.hexdigest(name)
+    end
+    
+    def self.delete(id)
+      $redis.del(id)
     end
     
     def self.mark_as_queued(disc, titles_to_convert)
