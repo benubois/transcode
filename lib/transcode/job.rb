@@ -17,9 +17,10 @@ module Transcode
       
       titles.each do |title|
         args = {
-          'name'  => disc_info['name'],
-          'path'  => disc_info['path'],
-          'title' => title
+          'name'          => disc_info['name'],
+          'path'          => disc_info['path'],
+          'title'         => title,
+          'original_name' => disc_info['name']
         }
 
         if titles.length > 1
@@ -39,17 +40,15 @@ module Transcode
     end
     
     def self.convert_enqueue(prepared_titles)
-      
-      prepared_titles['titles_to_transcode'].each do |title|
-        Resque.enqueue(ConvertJob, title)
-        Transcode.log.info("Queued #{title.inspect} for encode")
-      end
-      
       # Add to scan to archive
       unless prepared_titles['titles'].empty?
         History.add(prepared_titles['disc_info'], prepared_titles['titles'])
       end
       
+      prepared_titles['titles_to_transcode'].each do |title|
+        Resque.enqueue(ConvertJob, title)
+        Transcode.log.info("Queued #{title.inspect} for encode")
+      end
     end
     
     def self.enqueue_scan(name)

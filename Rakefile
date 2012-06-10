@@ -19,8 +19,7 @@ end
 
 desc "Start the progress reporter"
 task :progress do
-	progress = Transcode::Progress.new(nil)
-	progress.watch
+	Transcode::Progress.watch
 end
 
 require 'rake/testtask'

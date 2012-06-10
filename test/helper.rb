@@ -20,8 +20,6 @@ def seed
 	info['path'] = "#{Transcode.config.rips}/#{info['name']}"
 	info['titles'] = disc.title_scan(scan)
   
-  puts info.inspect
-	
 	Transcode::History.add(info, [1])
 end
 

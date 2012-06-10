@@ -2,7 +2,7 @@ module Transcode
   class History
     
     def self.list
-      keys    = $redis.keys("#{Transcode.config.redis_namespace}*")
+      keys    = $redis.keys("#{Transcode.config.redis_namespace}disc:*")
       
       if keys.empty?
         []
@@ -37,24 +37,43 @@ module Transcode
       JSON.parse($redis.get(id))
     end
     
-    def self.add(disc, titles_to_convert)
-      disc = mark_as_queued(disc, titles_to_convert)
+    def self.add(disc, titles)
+      disc = update_title_prop(disc, titles, 'queued', true)
       disc['id'] = get_id(disc['name'])
-      $redis.set disc['id'], disc.to_json
+      update_disc(disc['id'], disc)
     end
     
     def self.get_id(name)
-      Transcode.config.redis_namespace + Digest::SHA1.hexdigest(name)
+      Transcode.config.redis_namespace + 'disc:' + Digest::SHA1.hexdigest(name)
     end
     
     def self.delete(id)
       $redis.del(id)
     end
     
-    def self.mark_as_queued(disc, titles_to_convert)
-      disc['titles'].each_with_index do |title, index|
-        if titles_to_convert.include?(title['title'])
-          disc['titles'][index]['queued'] = true
+    def self.set_progress_file(progress_file, args)
+      id = get_id(args['original_name'])
+      disc = get(id)
+      disc = update_title_prop(disc, args['title'], 'progress_file', progress_file)
+      update_disc(id, disc)
+    end
+    
+    def self.set_progress(id, title, progress)
+      disc = get(id)
+      disc = update_title_prop(disc, title, 'progress', progress)
+      update_disc(id, disc)
+    end
+    
+    def self.update_disc(id, disc)
+      $redis.set(id, disc.to_json)
+    end
+    
+    def self.update_title_prop(disc, titles, property, value)
+    	titles = [titles] unless titles.kind_of?(Array)
+	
+      disc['titles'].each_with_index do |disc_title, index|
+        if titles.include?(disc_title['title'])
+          disc['titles'][index][property] = value
         end
       end
       disc

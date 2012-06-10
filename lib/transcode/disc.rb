@@ -16,12 +16,19 @@ module Transcode
     end
     
     def self.convert(args)
+      progress_file = Tempfile.new("transcode")
+      
+      History.set_progress_file(progress_file.path, args)
+      
       output = "#{Transcode.config.exports}/#{args['name']}.m4v"
       
       base = "#{Transcode.config.handbrake} -i #{Shellwords.escape(args['path'])} -o #{Shellwords.escape(output)} -t #{args['title']} -e x264 -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 stereo,auto -R Auto,Auto -D 2.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50 --native-language eng --subtitle scan --subtitle-forced=1"
       
       # Do the conversion
-      `#{base} 2>&1`
+      `#{base} 2>&1 > #{progress_file.path}`
+      
+      progress_file.close
+      progress_file.unlink
     end
     
     def timecode_to_seconds(timecode)
@@ -41,12 +48,15 @@ module Transcode
       titles.map { |title|
         timecode = title.match(/\+ duration: (.*)/)[1]
         {
-          'title'    => title.match(/^([0-9]+):/)[1].to_i,
-          'duration' => timecode_to_seconds(timecode),
-          'timecode' => timecode,
-          'feature'  => title.include?('Main Feature'),
-          'queued'   => false,
-          'blocks'   =>   title.scan(/([0-9]+) blocks,/).flatten.map{|block| block.to_i }
+          'title'         => title.match(/^([0-9]+):/)[1].to_i,
+          'duration'      => timecode_to_seconds(timecode),
+          'timecode'      => timecode,
+          'feature'       => title.include?('Main Feature'),
+          'queued'        => false,
+          'transcoded'    => false,
+          'progress_file' => '',
+          'progress'      => 0,
+          'blocks'        => title.scan(/([0-9]+) blocks,/).flatten.map{|block| block.to_i }
         }
       }
     end

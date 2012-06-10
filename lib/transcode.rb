@@ -10,7 +10,7 @@ module Transcode
       :rips            => File.expand_path(yaml['rips']),
       :exports         => File.expand_path(yaml['exports']),
       :handbrake       => yaml['handbrake'],
-      :redis_namespace => 'transcode:disc:'
+      :redis_namespace => 'transcode:'
   end
 
   def self.yaml
