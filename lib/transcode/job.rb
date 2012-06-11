@@ -7,10 +7,13 @@ module Transcode
         disc = Disc.new
         disc_info = disc.info(disc_name)
         titles = disc.title_candidates(disc_info['titles'])
+        
+        unless titles.empty?
+          History.add(disc_name, disc_info)
+        end
       else
         disc_info = History.get(id)
         titles = [title.to_i]
-        History.delete(id)
       end
       
       titles_to_transcode = []
@@ -26,27 +29,18 @@ module Transcode
         if titles.length > 1
           args['name'] += ".#{title.to_s}"
         end
-        
         titles_to_transcode.push(args)
         
       end
       
-      return {
-        'titles_to_transcode' => titles_to_transcode,
-        'titles' => titles,
-        'disc_info' => disc_info
-      }
+      return titles_to_transcode
       
     end
     
-    def self.convert_enqueue(prepared_titles)
-      # Add to scan to archive
-      unless prepared_titles['titles'].empty?
-        History.add(prepared_titles['disc_info'], prepared_titles['titles'])
-      end
-      
-      prepared_titles['titles_to_transcode'].each do |title|
+    def self.convert_enqueue(titles_to_transcode)
+      titles_to_transcode.each do |title|
         Resque.enqueue(ConvertJob, title)
+        History.update_title_prop(title['original_name'], title['title'], 'queued', true)
         Transcode.log.info("Queued #{title.inspect} for encode")
       end
     end

@@ -10,15 +10,19 @@ module Transcode
     
     def self.check_status
       discs = get_discs
-      discs.each do |disc|
-        disc['titles'].each do |title|
-          if File.exists? title['progress_file']
-            Transcode.log.info("progress disc: #{disc.inspect}")
-            progress = read_progress(title['progress_file'])
-            History.set_progress(disc['id'], title['title'], progress)
+      
+      unless discs.empty?
+        discs = History.cleanup(discs)
+        discs.each do |disc|
+          disc['titles'].each do |title|
+            if File.exists? title['progress_file']
+              progress = read_progress(title['progress_file'])
+              History.update_title_prop(disc['name'], title['title'], 'progress', progress)
+            end
           end
         end
       end
+      
     end
     
     def self.get_discs

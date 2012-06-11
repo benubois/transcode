@@ -18,7 +18,7 @@ module Transcode
     def self.convert(args)
       progress_file = Tempfile.new("transcode")
       
-      History.set_progress_file(progress_file.path, args)
+      History.update_title_prop(args['original_name'], args['title'], 'progress_file', progress_file.path)
       
       output = "#{Transcode.config.exports}/#{args['name']}.m4v"
       
@@ -26,6 +26,9 @@ module Transcode
       
       # Do the conversion
       `#{base} 2>&1 > #{progress_file.path}`
+      
+      # Mark as transcoded
+      History.update_title_prop(args['original_name'], args['title'], 'transcoded', true)
       
       progress_file.close
       progress_file.unlink
@@ -93,6 +96,7 @@ module Transcode
     
     def self.delete(id)
       disc = History.get(id)
+      
       # Remove from filesystem
       FileUtils.rm_rf(disc['path'])
       

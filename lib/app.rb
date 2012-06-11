@@ -36,5 +36,10 @@ module Transcode
       { :success => true }.to_json
     end
     
+    get '/disc/:id' do |id|
+      content_type :json
+      History.get(id).to_json
+    end
+    
   end
 end

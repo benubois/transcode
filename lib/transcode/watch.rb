@@ -3,7 +3,6 @@ module Transcode
   class Watch
     
     def start
-      Transcode.log.info("Started watching #{Transcode.config.rips}")
       FSSM.monitor(Transcode.config.rips, '*', :directories => true) do |path|
         path.create do |base, name, type|
           if is_movie_candidate?(name, type)
