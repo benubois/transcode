@@ -51,13 +51,22 @@ nav {
 		font-weight: bold;
 	}
 }
-.movies {
+.discs {
 	margin: 0;
 	padding: 0;
 	li {
+	    overflow: hidden;
+		border-bottom: 1px solid #ddd;
+		&.animated {
+			transform: translate3d(0,0,0);
+			-webkit-transform: translate3d(0,0,0);
+			-webkit-transition: all .3s linear;
+			height: 0 !important;
+		}
+	}
+	.disc {
 		padding: 10px 20px 0 10px;
 		list-style-type: none;
-		border-bottom: 1px solid #ddd;
 		font-weight: bold;
 		position: relative;
 		.delete {

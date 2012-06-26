@@ -1,35 +1,37 @@
-<ul class="movies">
-{{#movies}}
+<ul class="discs">
+{{#discs}}
 	<li id="{{id}}">
-		{{name}}
-		<div class="delete">
-			<form action="/disc/{{id}}" method="post">
-			    <input name="_method" type="hidden" value="delete" />
-				<button>Delete</button>
-			</form>
-		</div>
-		<div class="titles">
-			<div class="row clearfix">
-			{{#titles}}
-				<a 
-					data-id="{{id}}" 
-					data-title="{{title}}"
-					{{#queued}}class="selected"{{/queued}}
-				>
-					{{timecode}}
-					
-					<span class="progress-wrap">
-						{{#queued}}
-						<span class="progress">
-							<span class="progress-inner" style="width: {{#transcoded}}100{{/transcoded}}{{^transcoded}}{{progress}}{{/transcoded}}%;"></span>
-						</span>
-						{{/queued}}
-					</span>
-					
-				</a>
-			{{/titles}}
+		<div class="disc">
+			{{name}}
+			<div class="delete">
+				<form action="/disc/{{id}}" method="post">
+					<input name="_method" type="hidden" value="delete" />
+					<button>Delete</button>
+				</form>
+			</div>
+			<div class="titles">
+				<div class="row clearfix">
+					{{#titles}}
+						<a 
+						data-id="{{id}}" 
+						data-title="{{title}}"
+						{{#queued}}class="selected"{{/queued}}
+						>
+							{{timecode}}
+							
+							<span class="progress-wrap">
+								{{#queued}}
+								<span class="progress">
+									<span class="progress-inner" style="width: {{#transcoded}}100{{/transcoded}}{{^transcoded}}{{progress}}{{/transcoded}}%;"></span>
+								</span>
+								{{/queued}}
+							</span>
+							
+						</a>
+					{{/titles}}
+				</div>
 			</div>
 		</div>
 	</li>
-{{/movies}}
+{{/discs}}
 </ul>

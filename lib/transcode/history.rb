@@ -14,8 +14,7 @@ module Transcode
     end
     
     def self.cleanup(discs)
-      
-      
+
       discs.reject do |disc|
         
         if File.exists? disc['path']

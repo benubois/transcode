@@ -1,6 +1,6 @@
 window.transcode = 
   updateTitles: () ->
-    $('.movies').find('li').each (index, movie) ->
+    $('.discs').find('li').each (index, movie) ->
       id = $(movie).attr('id')
       $.getJSON("/disc/#{id}", (disc) ->
         $.each(disc.titles, (i, title) ->
@@ -11,7 +11,7 @@ window.transcode =
 
 transcode.init = 
   enqueueTitle: () ->
-    $('.movies').on 'click', 'a:not(.selected)', (e) ->
+    $('.discs').on 'click', 'a:not(.selected)', (e) ->
       $(@).addClass('selected')
       params = 
         id: $(@).data('id')
@@ -19,20 +19,32 @@ transcode.init =
       $.post "/enqueue", params      
       e.preventDefault()
   deleteMovie: () ->
-    $('.movies').on 'click', 'button', (e) ->
+    $('.discs').on 'click', 'button', (e) ->
       form = $(@).parents('form')
-      $(@).parents('li').hide('fast', () -> $(@).remove())
+      container = $(@).parents('li')
+      container.addClass('animated')
+      
+      # Remove element after animation is complete
+      window.setTimeout(() ->
+        container.remove()
+      , 300)
+      
       $.ajax
         type: form.attr('method'),
         url: form.attr('action'),
         data: form.serialize(),
       e.preventDefault()
-  update: () ->
-    window.setInterval(() ->
-      transcode.updateTitles()
-    , 1000)
+  # update: () ->
+  #   window.setInterval(() ->
+  #     transcode.updateTitles()
+  #   , 1000)
+  discHeight: () ->
+    $('.discs li').height(() ->
+      $(@).css
+        height: "#{$(@).height()}px"
+    )
 
 $(document).ready () ->
   $.each(transcode.init, (i, item)->
-    item();
+    item()
   )

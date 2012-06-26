@@ -2,7 +2,7 @@ module Transcode
   module Views
     class History < Layout
       
-      def movies
+      def discs
         Transcode::History.list
       end
       
