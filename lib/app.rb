@@ -23,7 +23,7 @@ module Transcode
     end
     
     post '/enqueue' do
-      titles = Job.prepare_titles(nil, params[:id], params[:title].to_i)
+      titles = Job.format_titles(History.get(params[:id]), [params[:title].to_i])
       Job.convert_enqueue(titles)
       
       content_type :json

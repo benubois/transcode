@@ -34,10 +34,10 @@ transcode.init =
         url: form.attr('action'),
         data: form.serialize(),
       e.preventDefault()
-  # update: () ->
-  #   window.setInterval(() ->
-  #     transcode.updateTitles()
-  #   , 1000)
+  update: () ->
+    window.setInterval(() ->
+      transcode.updateTitles()
+    , 1000)
   discHeight: () ->
     $('.discs li').height(() ->
       $(@).css

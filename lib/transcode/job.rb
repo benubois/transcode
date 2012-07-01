@@ -1,40 +1,16 @@
 module Transcode
   class Job
     
-    def self.prepare_titles(disc_name = nil, id = nil, title = nil)
-      if disc_name
-        # Get disc info
-        disc = Disc.new
-        disc_info = disc.info(disc_name)
-        titles = disc.title_candidates(disc_info['titles'])
-        
-        unless titles.empty?
-          History.add(disc_name, disc_info)
-        end
-      else
-        disc_info = History.get(id)
-        titles = [title.to_i]
-      end
-      
-      titles_to_transcode = []
-      
-      titles.each do |title|
-        args = {
-          'name'          => disc_info['name'],
+    def self.format_titles(disc_info, titles)
+      titles.map { |title|
+        name = (titles.length > 1)  ? "#{disc_info['name']}.#{title.to_s}" : disc_info['name']
+        {
+          'name'          => name,
           'path'          => disc_info['path'],
           'title'         => title,
           'original_name' => disc_info['name']
         }
-
-        if titles.length > 1
-          args['name'] += ".#{title.to_s}"
-        end
-        titles_to_transcode.push(args)
-        
-      end
-      
-      return titles_to_transcode
-      
+      }
     end
     
     def self.convert_enqueue(titles_to_transcode)
