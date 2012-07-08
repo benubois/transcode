@@ -19,7 +19,9 @@ end
 
 desc "Start the progress reporter"
 task :progress do
-	Transcode::Progress.watch
+	EventMachine::run {
+	  EventMachine::start_server "127.0.0.1", 8081, Transcode::Progress
+	}
 end
 
 require 'rake/testtask'

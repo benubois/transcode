@@ -10,3 +10,7 @@ gem 'json'
 gem 'sprockets'
 gem 'coffee-script'
 gem 'sass'
+
+group :test do
+  gem 'resque_spec'
+end

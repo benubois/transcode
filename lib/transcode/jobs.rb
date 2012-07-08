@@ -1,25 +1,36 @@
 module Transcode
   class Jobs
-    
-    def self.convert_enqueue(titles_to_transcode)
-      titles_to_transcode.each do |title|
-        Resque.enqueue(ConvertJob, title)
-        History.update_title_prop(title['original_name'], title['title'], 'queued', true)
-        Transcode.log.info("Queued #{title.inspect} for encode")
+        
+    def self.convert_enqueue(objekt)
+      
+      case objekt.class.name
+      when 'Transcode::Disc'
+        objekt.titles.map do |title| 
+          if title.auto_transcode?
+            Resque.enqueue(ConvertJob, title.id)
+            title.queued = true
+          end
+        end
+        objekt.save
+      when 'Transcode::Title'
+        Resque.enqueue(ConvertJob, objekt.id)
+        objekt.queued = true
+        objekt.save
       end
+      
     end
     
-    def self.enqueue_scan(name)
+    def self.enqueue_scan(base, name)
       Transcode.log.info("Queued #{name} for scan")
-      Resque.enqueue(ScanJob, name)
+      Resque.enqueue(ScanJob, base, name)
     end
     
   end
   
   class ConvertJob
     @queue = :transcode_convert
-    def self.perform(args)
-      Disc.convert(args)
+    def self.perform(title_id)
+      Handbrake.convert(title_id)
     end
   end
   
@@ -36,7 +47,7 @@ module Transcode
       info = Handbrake.scan("#{base}/#{name}")
       disc = Disc.new_from_rip(base, name, info)
       disc.save
-      pp disc
+      Jobs.convert_enqueue(disc)
     end
   end
   

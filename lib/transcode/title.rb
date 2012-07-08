@@ -18,11 +18,11 @@ module Transcode
     attr_reader :feature
     
     # Public: Returns the Boolean value of whether or not this has been queued
-    attr_reader :queued
+    attr_accessor :queued
     
     # Public: Returns the Boolean value of whether or this has been 
     # successfully transcoded
-    attr_reader :transcoded
+    attr_accessor :transcoded
     
     # Public: Returns the String value of the location of the progress file
     attr_reader :progress_file
@@ -37,6 +37,9 @@ module Transcode
     # Public: Returns a bool of whether or not this title was marked to auto transcode
     attr_accessor :auto_transcode
     
+    # Public: Returns the id of the parent disc
+    attr_accessor :disc_id
+    
     def initialize(options)
       @id             = options['id']
       @title          = options['title']
@@ -49,6 +52,7 @@ module Transcode
       @progress       = options['progress']
       @blocks         = options['blocks']
       @auto_transcode = options['auto_transcode']
+      @disc_id        = options['disc_id']
     end
     
     # Instantiate new title instance from database
@@ -76,6 +80,7 @@ module Transcode
       options['progress']       = 0
       options['blocks']         = title.scan(/([0-9]+) blocks,/).flatten.map{|block| block.to_i }
       options['id']             = "#{disc_id}:title:#{options['title']}"
+      options['disc_id']        = disc_id
       options['auto_transcode'] = nil
       Title.new(options)
     end
@@ -96,6 +101,22 @@ module Transcode
   	  self.instance_variables.each {|var| hash[var.to_s.delete("@")] = self.instance_variable_get(var) }
       hash.delete('blocks')
   	  hash
+    end
+    
+    def auto_transcode?
+      @auto_transcode && false == @queued
+    end
+    
+    def save
+      $redis.sadd("#{@disc_id}:titles", @id)
+
+      # Add to block set
+      $redis.sadd("#{@disc_id}:blocks", "#{@id}:blocks")
+        
+      # Add block set
+      $redis.sadd("#{@id}:blocks", @blocks)
+                
+      $redis.mapped_hmset(@id, self)
     end
 
   end

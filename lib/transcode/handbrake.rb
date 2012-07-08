@@ -1,23 +1,24 @@
 module Transcode
   class Handbrake
     
-    def self.convert(args)
-      progress_file = Tempfile.new("transcode")
+    def self.convert(title_id)
+      title = Title.find(title_id)
+      disc  = Disc.find(title.disc_id)
       
-      History.update_title_prop(args['original_name'], args['title'], 'progress_file', progress_file.path)
+      # Save what title is currently being transcoded
+      $redis.set('transcode:transcoding', title.id)
       
-      output = "#{Transcode.config.exports}/#{args['name']}.m4v"
+      output = "#{Transcode.config.exports}/#{disc.name}.#{title.title}.m4v"
+      base   = "#{Transcode.config.handbrake} -i #{Shellwords.escape(disc.path)} -o #{Shellwords.escape(output)} -t #{title.title} -e x264 -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 stereo,auto -R Auto,Auto -D 2.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50 --native-language eng --subtitle scan --subtitle-forced=1"
       
-      base = "#{Transcode.config.handbrake} -i #{Shellwords.escape(args['path'])} -o #{Shellwords.escape(output)} -t #{args['title']} -e x264 -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 stereo,auto -R Auto,Auto -D 2.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50 --native-language eng --subtitle scan --subtitle-forced=1"
+      # Do the conversion and send progress to progress server
+      `#{base} 2>&1 | nc localhost 8081`
       
-      # Do the conversion
-      `#{base} 2>&1 > #{progress_file.path}`
+      # Nothing is transcoding now
+      $redis.del('transcode:transcoding')
       
       # Mark as transcoded
-      History.update_title_prop(args['original_name'], args['title'], 'transcoded', true)
-      
-      progress_file.close
-      progress_file.unlink
+      $redis.hset(title.id, 'transcoded', 'true')
     end
     
     def self.scan(path)

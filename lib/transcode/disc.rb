@@ -22,8 +22,9 @@ module Transcode
     
     def self.find(id)
       disc = $redis.hgetall(id)
-      disc.titles = Title.find_all("#{disc['id']}:titles")
-      Disc.new(disc)
+      disc = Disc.new(disc)
+      disc.titles = Title.find_all("#{disc.id}:titles")
+      disc
     end
     
     def self.new_from_rip(base, name, info)
@@ -53,16 +54,7 @@ module Transcode
 
       # Add title set and hashes
       @titles.each do |title|
-        $redis.sadd("#{@id}:titles", title.id)
-
-        # Add to block set
-        $redis.sadd("#{@id}:blocks", "#{title.id}:blocks")
-        
-        # Add block set
-        $redis.sadd("#{title.id}:blocks", title.blocks)
-                
-        $redis.mapped_hmset(title.id, title)
-
+        title.save
       end
       
       $redis.exec
