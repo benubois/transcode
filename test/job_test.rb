@@ -11,7 +11,7 @@ describe Disc do
   end
   
   it "has prepared titles" do
-    titles = Job.prepare_titles(nil, History.get_id('DVD Name'), 1)
+    titles = Jobs.prepare_titles(nil, History.get_id('DVD Name'), 1)
     titles['titles_to_transcode'].length.must_equal 1
   end
 
