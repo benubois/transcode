@@ -1,108 +1,133 @@
 module Transcode
   class Disc
     
-    def info(name)
+    # Public: Returns the String id stored in the database
+    attr_reader :id
+
+    # Public: Returns the String name of the disc title
+    attr_reader :name
+
+    # Public: Returns the String path to the disc
+    attr_reader :path
+
+    # Public: Returns an Array of titles
+    attr_accessor :titles
+    
+    def initialize(options)
+      @id     = options['id']
+      @name   = options['name']
+      @path   = options['path'] 
+      @titles = options['titles'] 
+    end
+    
+    def self.find(id)
+      disc = $redis.hgetall(id)
+      disc.titles = Title.find_all("#{disc['id']}:titles")
+      Disc.new(disc)
+    end
+    
+    def self.new_from_rip(base, name, info)
+      disc_path = "#{base}/#{name}"
       disc = {}
+      disc['id'] = self.get_id(disc_path)
+      disc['path'] = disc_path
       disc['name'] = name
-      disc['path'] = "#{Transcode.config.rips}/#{name}"
-      titles = utf8_clean(`#{Transcode.config.handbrake} -i #{Shellwords.escape(disc['path'])} -t 0 2>&1`)
-      disc['titles'] = title_scan(titles)
+      disc['titles'] = Title.get_titles_from_string(disc['id'], info)
+      disc = Disc.new(disc)
+      disc.auto_transcode
       disc
     end
     
-    def utf8_clean(data)
-      ic = Iconv.new('UTF-8//IGNORE', 'UTF-8')
-      ic.iconv(data + ' ')[0..-2]
+    def self.get_id(disc_path)
+        'transcode:disc:' + File.readlines("#{disc_path}/VIDEO_TS/discident.xml").grep(/fingerPrint/).to_s.match(/<fingerPrint>(.*?)<\/fingerPrint>/)[1]
     end
     
-    def self.convert(args)
-      progress_file = Tempfile.new("transcode")
+    def save
+      $redis.multi
       
-      History.update_title_prop(args['original_name'], args['title'], 'progress_file', progress_file.path)
+      # Add disc to disc set
+      $redis.sadd('transcode:discs', @id)
       
-      output = "#{Transcode.config.exports}/#{args['name']}.m4v"
-      
-      base = "#{Transcode.config.handbrake} -i #{Shellwords.escape(args['path'])} -o #{Shellwords.escape(output)} -t #{args['title']} -e x264 -q 20.0 -a 1,1 -E faac,copy:ac3 -B 160,160 -6 stereo,auto -R Auto,Auto -D 2.0,0.0 -f mp4 -4 --detelecine --decomb --loose-anamorphic -m -x b-adapt=2:rc-lookahead=50 --native-language eng --subtitle scan --subtitle-forced=1"
-      
-      # Do the conversion
-      `#{base} 2>&1 > #{progress_file.path}`
-      
-      # Mark as transcoded
-      History.update_title_prop(args['original_name'], args['title'], 'transcoded', true)
-      
-      progress_file.close
-      progress_file.unlink
-    end
-    
-    def timecode_to_seconds(timecode)
-      multipliers = [1, 60, 3600]
-      seconds = timecode.split(':').map { |time| time.to_i * multipliers.pop }
-      seconds.inject {|sum, n| sum + n }
-    end
+      # Add disc hash
+      $redis.mapped_hmset(@id, { 'id' => @id, 'name' => @name, 'path' => @path })
 
-    def title_scan(disc)
+      # Add title set and hashes
+      @titles.each do |title|
+        $redis.sadd("#{@id}:titles", title.id)
 
-      # split by title and 
-      titles = disc.split(/^\+ title /m)
+        # Add to block set
+        $redis.sadd("#{@id}:blocks", "#{title.id}:blocks")
+        
+        # Add block set
+        $redis.sadd("#{title.id}:blocks", title.blocks)
+                
+        $redis.mapped_hmset(title.id, title)
 
-      # remove non-title data
-      titles.shift
-  
-      titles.map { |title|
-        timecode = title.match(/\+ duration: (.*)/)[1]
-        {
-          'title'         => title.match(/^([0-9]+):/)[1].to_i,
-          'duration'      => timecode_to_seconds(timecode),
-          'timecode'      => timecode,
-          'feature'       => title.include?('Main Feature'),
-          'queued'        => false,
-          'transcoded'    => false,
-          'progress_file' => '',
-          'progress'      => 0,
-          'blocks'        => title.scan(/([0-9]+) blocks,/).flatten.map{|block| block.to_i }
-        }
-      }
-    end
-
-    def title_candidates(titles)
-      # remove anything under 20 min
-      title = titles.delete_if { |title| title['duration'] < 1200 }
-  
-      titles = titles.sort_by { |title| title['duration'] }.reverse
-  
-      if 1 === titles.length
-        titles = titles
-      else
-        # Probably a tv show, titles that contain all the same blocks as any of the other titles
-        # These titles are usually the "Play All" titles
-        titles = titles.delete_if.each_with_index {|candidate, index| 
-          title_contains_blocks(candidate, titles, index)
-        }
-      end  
-      
-      # Just return the title numbers
-      titles.sort_by { |title| title['title'] }.map { |title| title['title'] }
-    end
-    
-    def title_contains_blocks(candidate, titles, index)
-      test_group = titles.dup
-      test_group.delete_at(index)
-      test_group.each do |title|
-        return true if true === title['blocks'].all?{|block| candidate['blocks'].include?(block)}
       end
-  
-      return false
+      
+      $redis.exec
     end
     
-    def self.delete(id)
-      disc = History.get(id)
+    def delete
+      # Get title set
+      titles = $redis.smembers("#{@id}:titles")
       
-      # Remove from filesystem
-      FileUtils.rm_rf(disc['path'])
+      # Get blocks set
+      blocks = $redis.smembers("#{@id}:blocks")
       
-      # Remove from history
-      History.delete(id)
-    end
+      $redis.multi
 
+      # remove from set
+      $redis.srem('transcode:discs', @id)
+      
+      # remove disc hash
+      $redis.del(@id)
+      
+      # Remove title set
+      $redis.del("#{@id}:titles")
+      
+      # Remove block set
+      $redis.del("#{@id}:blocks")
+      
+      # Remove all titles
+      $redis.del(titles)
+
+      # Remove all blocks
+      $redis.del(blocks)
+
+      # Remove from filesystem
+      # FileUtils.rm_rf(disc['path'])
+      
+      $redis.exec
+      
+    end
+    
+    def auto_transcode
+      # remove anything under 20 min
+      
+      @titles.map do |title| 
+        title.auto_transcode = false if title.duration < 1200
+      end
+      
+      @titles.map do |title|
+        blocks = @titles.inject([]) do |other_blocks, title_inner|
+          unless title.blocks == title_inner.blocks
+            other_blocks += title_inner.blocks
+          end
+          other_blocks.uniq.sort
+        end
+        
+        # If a title cotains all the same blocks of every other title it's probably a play all title
+        if blocks == title.blocks.sort
+          title.auto_transcode = false
+        end
+      end
+      
+      @titles.map do |title|
+        title.auto_transcode = true unless false == title.auto_transcode
+      end
+      
+    end    
+    
   end
 end

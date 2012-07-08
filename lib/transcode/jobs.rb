@@ -1,17 +1,5 @@
 module Transcode
-  class Job
-    
-    def self.format_titles(disc_info, titles)
-      titles.map { |title|
-        name = (titles.length > 1)  ? "#{disc_info['name']}.#{title.to_s}" : disc_info['name']
-        {
-          'name'          => name,
-          'path'          => disc_info['path'],
-          'title'         => title,
-          'original_name' => disc_info['name']
-        }
-      }
-    end
+  class Jobs
     
     def self.convert_enqueue(titles_to_transcode)
       titles_to_transcode.each do |title|
@@ -27,4 +15,29 @@ module Transcode
     end
     
   end
+  
+  class ConvertJob
+    @queue = :transcode_convert
+    def self.perform(args)
+      Disc.convert(args)
+    end
+  end
+  
+  class DeleteJob
+    @queue = :transcode_delete
+    def self.perform(id)
+      Disc.delete(id)
+    end
+  end
+  
+  class ScanJob
+    @queue = :transcode_scan
+    def self.perform(base, name)
+      info = Handbrake.scan("#{base}/#{name}")
+      disc = Disc.new_from_rip(base, name, info)
+      disc.save
+      pp disc
+    end
+  end
+  
 end
