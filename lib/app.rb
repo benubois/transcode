@@ -2,7 +2,7 @@ module Transcode
   class App < Sinatra::Base
     
     register Mustache::Sinatra
-    require 'views/layout'
+    require 'frontend/views/layout'
     
     dir = File.dirname(File.expand_path(__FILE__))
 
@@ -10,8 +10,8 @@ module Transcode
     set :static, true
     set :mustache, {
       :namespace => Transcode,
-      :templates => "#{dir}/templates",
-      :views => "#{dir}/views"
+      :templates => "#{dir}/frontend/templates",
+      :views => "#{dir}/frontend/views"
     }
     
     get '/' do
