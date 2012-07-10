@@ -2,7 +2,6 @@ module Transcode
   class Jobs
         
     def self.convert_enqueue(objekt)
-      
       case objekt.class.name
       when 'Transcode::Disc'
         objekt.titles.map do |title| 
@@ -17,7 +16,6 @@ module Transcode
         objekt.queued = true
         objekt.save
       end
-      
     end
     
     def self.enqueue_scan(base, name)
@@ -37,7 +35,7 @@ module Transcode
   class DeleteJob
     @queue = :transcode_delete
     def self.perform(id)
-      Disc.delete(id)
+      Disc.delete(Disc.find(id))
     end
   end
   

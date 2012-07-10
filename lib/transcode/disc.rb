@@ -95,11 +95,10 @@ module Transcode
       # Remove all blocks
       $redis.del(blocks)
 
-      # Remove from filesystem
-      # FileUtils.rm_rf(disc['path'])
-      
       $redis.exec
       
+      # Remove from filesystem
+      FileUtils.rm_rf(disc.path)
     end
     
     def auto_transcode

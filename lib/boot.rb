@@ -32,7 +32,6 @@ require 'transcode/title'
 require 'transcode/disc'
 require 'transcode/jobs'
 require 'transcode/watch'
-require 'transcode/history'
 require 'app'
 
 include FileUtils

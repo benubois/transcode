@@ -22,21 +22,16 @@ module Transcode
       mustache :history
     end
     
-    get '/enqueue/:title_id' do
+    get '/enqueue/:title_id' do |title_id|
       Jobs.convert_enqueue(Title.find(title_id))
       content_type :json
       { :success => true }.to_json
     end
     
     delete '/disc/:id' do |id|
-      Disc.delete(id)
+      Resque.enqueue(DeleteJob, id)
       content_type :json
       { :success => true }.to_json
-    end
-    
-    get '/disc/:id' do |id|
-      content_type :json
-      History.get(id).to_json
     end
     
   end
