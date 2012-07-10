@@ -27,6 +27,14 @@ module Transcode
       disc
     end
     
+    def self.find_all(set_id)
+      discs = []
+      $redis.smembers(set_id).each do |disc|
+        discs << Disc.find(disc)
+      end
+      discs
+    end
+    
     def self.new_from_rip(base, name, info)
       disc_path = "#{base}/#{name}"
       disc = {}

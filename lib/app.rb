@@ -22,10 +22,8 @@ module Transcode
       mustache :history
     end
     
-    post '/enqueue' do
-      titles = Jobs.format_titles(History.get(params[:id]), [params[:title].to_i])
-      Jobs.convert_enqueue(titles)
-      
+    get '/enqueue/:title_id' do
+      Jobs.convert_enqueue(Title.find(title_id))
       content_type :json
       { :success => true }.to_json
     end

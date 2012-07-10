@@ -3,7 +3,7 @@ module Transcode
     class History < Layout
       
       def discs
-        Transcode::History.list
+        Disc.find_all('transcode:discs')
       end
       
     end

@@ -45,9 +45,9 @@ module Transcode
       @title          = options['title']
       @duration       = options['duration']
       @timecode       = options['timecode']
-      @feature        = options['feature']
-      @queued         = options['queued']
-      @transcoded     = options['transcoded']
+      @feature        = Transcode.to_bool(options['feature'])
+      @queued         = Transcode.to_bool(options['queued'])
+      @transcoded     = Transcode.to_bool(options['transcoded'])
       @progress_file  = options['progress_file']
       @progress       = options['progress']
       @blocks         = options['blocks']
@@ -63,7 +63,7 @@ module Transcode
     def self.find_all(set_id)
       titles = []
       $redis.smembers(set_id).each do |title|
-        titles.push(Title.find(title))
+        titles << Title.find(title)
       end
       titles
     end
@@ -76,7 +76,6 @@ module Transcode
       options['feature']        = title.include?('Main Feature')
       options['queued']         = false
       options['transcoded']     = false
-      options['progress_file']  = ''
       options['progress']       = 0
       options['blocks']         = title.scan(/([0-9]+) blocks,/).flatten.map{|block| block.to_i }
       options['id']             = "#{disc_id}:title:#{options['title']}"

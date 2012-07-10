@@ -12,13 +12,8 @@
 			<div class="titles">
 				<div class="row clearfix">
 					{{#titles}}
-						<a 
-						data-id="{{id}}" 
-						data-title="{{title}}"
-						{{#queued}}class="selected"{{/queued}}
-						>
+						<a href="/enqueue/{{id}}" {{#queued}}class="selected"{{/queued}}>
 							{{timecode}}
-							
 							<span class="progress-wrap">
 								{{#queued}}
 								<span class="progress">
@@ -26,7 +21,6 @@
 								</span>
 								{{/queued}}
 							</span>
-							
 						</a>
 					{{/titles}}
 				</div>
