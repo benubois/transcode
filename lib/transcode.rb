@@ -6,11 +6,15 @@ module Transcode
   end
   
   def self.config
-    OpenStruct.new \
+    OpenStruct.new({
       :rips            => File.expand_path(yaml['rips']),
       :exports         => File.expand_path(yaml['exports']),
       :handbrake       => yaml['handbrake'],
+      :pusher_app_id   => yaml['pusher_app_id'],
+      :pusher_key      => yaml['pusher_key'],
+      :pusher_secret   => yaml['pusher_secret'],
       :redis_namespace => 'transcode:'
+    })
   end
 
   def self.yaml

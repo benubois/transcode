@@ -91,17 +91,14 @@ nav {
 			color: #4f5459;
 			position: relative;
 			text-decoration: none;
-			&.selected {
-				background: -webkit-linear-gradient(#bcbfc8, #f6f7f8);
-			}
 			.progress-wrap {
 				width: 100%;
 				height: 4px;
 				display: block;
 				.progress {
+					display: none;
 					border: 1px solid #92949a;
 					height: 100%;
-					display: block;
 					border-radius: 2px;
 					background: #FFF;
 					.progress-inner {
@@ -110,7 +107,13 @@ nav {
 						height: 100%;
 						display: block;
 					}
-				}				
+				}	
+			}
+			&.selected {
+				background: -webkit-linear-gradient(#bcbfc8, #f6f7f8);
+				.progress {
+					display: block;
+				}
 			}
 		}
 	}

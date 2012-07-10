@@ -24,6 +24,7 @@ require 'sinatra/base'
 require 'mustache/sinatra'
 require 'fssm'
 require 'eventmachine'
+require 'pusher'
 
 require 'transcode'
 require 'transcode/handbrake'
@@ -33,6 +34,10 @@ require 'transcode/disc'
 require 'transcode/jobs'
 require 'transcode/watch'
 require 'app'
+
+Pusher.app_id = Transcode.config.pusher_app_id
+Pusher.key    = Transcode.config.pusher_key
+Pusher.secret = Transcode.config.pusher_secret
 
 include FileUtils
 

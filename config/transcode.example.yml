@@ -1,3 +1,6 @@
 rips: ~/Movies
 exports: ~/Desktop/Export
 handbrake: HandBrakeCLI
+pusher_app_id: 
+pusher_key: 
+pusher_secret: 

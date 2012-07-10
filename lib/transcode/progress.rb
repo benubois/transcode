@@ -4,7 +4,19 @@ module Transcode
     def receive_data(data)
       progress = data.match(/2 of 2, (.*?)\./)
       if progress
-        $redis.hset($redis['transcode:transcoding'], 'progress', progress[1])
+        update_clients(progress[1])
+        update_data(progress[1])
+      end
+    end
+    
+    def update_data(progress)
+      $redis.hset($redis['transcode:transcoding'], 'progress', progress)
+    end
+    
+    def update_clients(progress)
+      if progress > $redis.hget($redis['transcode:transcoding'], 'progress')
+        Transcode.log.info(progress)
+        Pusher['progress_updates'].trigger!('progress', {:id => $redis['transcode:transcoding'], :progress => progress})
       end
     end
     

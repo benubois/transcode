@@ -1,10 +1,11 @@
-window.transcode = 
-  setDiscHeight: () ->
-    $('.discs li').height(() ->
-      $(@).removeAttr('style')
-      $(@).css
-        height: "#{$(@).height()}px"
-    )
+window.transcode = window.transcode || {}
+
+transcode.setDiscHeight = () ->
+  $('.discs li').height(() ->
+    $(@).removeAttr('style')
+    $(@).css
+      height: "#{$(@).height()}px"
+  )
 
 transcode.init = 
   enqueueTitle: () ->

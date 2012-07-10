@@ -98,7 +98,7 @@ module Transcode
       $redis.exec
       
       # Remove from filesystem
-      FileUtils.rm_rf(disc.path)
+      FileUtils.rm_rf(@path)
     end
     
     def auto_transcode

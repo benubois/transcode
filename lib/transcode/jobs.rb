@@ -35,7 +35,8 @@ module Transcode
   class DeleteJob
     @queue = :transcode_delete
     def self.perform(id)
-      Disc.delete(Disc.find(id))
+      disc = Disc.find(id)
+      disc.delete()
     end
   end
   
