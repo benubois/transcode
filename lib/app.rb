@@ -15,10 +15,12 @@ module Transcode
     }
     
     get '/' do
+      @queue_selected = true
       mustache :index
     end
     
     get '/history' do
+      @history_selected = true
       mustache :history
     end
     

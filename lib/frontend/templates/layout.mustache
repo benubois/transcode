@@ -11,11 +11,10 @@
 </head>
 <body>
 	<header class="clearfix">
-		<strong class="logo">Transcode</strong>
 		<nav>
 			<ul>
-				<li><a href="/">Queue</a></li>
-				<li><a href="/history">History</a></li>
+				<li {{#queue_selected}}class="selected"{{/queue_selected}}><a href="/">Queue</a></li>
+				<li {{#history_selected}}class="selected"{{/history_selected}}><a href="/history">History</a></li>
 				<li><a href="/resque">Resque</a></li>
 			</ul>
 		</nav>

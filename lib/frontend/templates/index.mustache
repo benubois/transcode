@@ -1,7 +1,14 @@
 <ul class="queue">
 {{#queue}}
-	<li>
-		{{name}}, Title {{title}}
+	<li data-id="{{id}}">
+		<div class="name">
+			{{name}}
+			<canvas id="progress-{{title}}" width="25" height="25" class="progress-circle" data-progress="{{progress}}"></canvas>
+		</div>
+		<div class="meta">
+			Title {{title}} 
+			<span class="meta-light">{{timecode}}</span>
+		</div>
 	</li>
 {{/queue}}
 {{^queue}}

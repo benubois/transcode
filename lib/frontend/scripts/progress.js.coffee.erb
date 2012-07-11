@@ -5,3 +5,5 @@ transcode.channel = transcode.pusher.subscribe('progress_updates')
 
 transcode.channel.bind 'progress', (message) ->
   $("[data-id='#{message.id}']").find(".progress-inner").css({width: "#{message.progress}%"})
+  circle = $("[data-id='#{message.id}']").find(".progress-circle").attr('id')
+  transcode.progressCircle(circle, message.progress) if circle
