@@ -58,6 +58,7 @@ nav {
 		.name {
 			margin-bottom: 6px;
 			position: relative;
+			padding-right:30px;
 			.progress-circle {
 				position: absolute;
 				right: 0;
@@ -98,6 +99,9 @@ nav {
 			position: absolute;
 			top: 8px;
 			right: 10px;
+		}
+		.name {
+			padding-right: 50px;
 		}
 	}
 	.titles {

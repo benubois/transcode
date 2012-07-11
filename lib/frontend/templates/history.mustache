@@ -2,7 +2,7 @@
 {{#discs}}
 	<li id="{{id}}">
 		<div class="disc">
-			{{name}}
+			<div class="name">{{name}}</div>
 			<div class="delete">
 				<form action="/disc/{{id}}" method="post">
 					<input name="_method" type="hidden" value="delete" />

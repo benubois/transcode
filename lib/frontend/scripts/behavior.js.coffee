@@ -10,10 +10,7 @@ transcode.setDiscHeight = () ->
 transcode.progressCircle = (id, percent) ->
   canvas = document.getElementById(id)
   ctx = canvas.getContext("2d")
-  
-  canvas.width = canvas.width * window.devicePixelRatio
-  canvas.height = canvas.height * window.devicePixelRatio
-  
+    
   gradient = ctx.createLinearGradient(0,0,0,canvas.width)  
   gradient.addColorStop(0, '#bfccdb')  
   gradient.addColorStop(1, '#a4b8cc') 
@@ -43,9 +40,8 @@ transcode.progressCircle = (id, percent) ->
   ctx.beginPath()
   ctx.arc(mid_x, mid_y, mid_x - .5, 0, 2 * Math.PI, false)
   ctx.lineWidth = strokeWidth
-  ctx.strokeStyle = "#99a9ba"
+  ctx.strokeStyle = "#8195a9"
   ctx.stroke()
-  ctx.scale(window.devicePixelRatio, window.devicePixelRatio)
   
 
 transcode.init = 
