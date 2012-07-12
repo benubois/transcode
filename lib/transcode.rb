@@ -27,7 +27,7 @@ module Transcode
   
   def self.to_bool(value)
     return true if value == true || value == 'true'
-    return false if value == false || value.empty? || self == 'false'
+    return false if value == false || value == 'false'
   end
   
 end
