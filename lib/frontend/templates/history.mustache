@@ -1,6 +1,6 @@
 <ul class="discs">
 {{#discs}}
-	<li id="{{id}}">
+	<li>
 		<div class="disc">
 			<div class="name">{{name}}</div>
 			<div class="delete">
@@ -14,11 +14,7 @@
 					{{#titles}}
 						<a href="/enqueue/{{id}}" {{#queued}}class="selected"{{/queued}} data-id="{{id}}">
 							{{timecode}}
-							<span class="progress-wrap">
-								<span class="progress">
-									<span class="progress-inner" style="width: {{#transcoded}}100{{/transcoded}}{{^transcoded}}{{progress}}{{/transcoded}}%;"></span>
-								</span>
-							</span>
+							{{>progress}}
 						</a>
 					{{/titles}}
 				</div>
