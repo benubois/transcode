@@ -41,7 +41,7 @@ module Transcode
       disc['id'] = self.get_id(disc_path)
       disc['path'] = disc_path
       disc['name'] = name
-      disc['titles'] = Title.get_titles_from_string(disc['id'], info)
+      disc['titles'] = Title.get_titles_from_string(disc, info)
       disc = Disc.new(disc)
       disc.auto_transcode
       disc

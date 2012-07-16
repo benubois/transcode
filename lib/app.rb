@@ -16,12 +16,20 @@ module Transcode
     
     get '/' do
       @queue_selected = true
-      mustache :index
+      if env['HTTP_X_PJAX']
+        mustache :index, :layout => false
+      else
+        mustache :index
+      end
     end
     
     get '/history' do
       @history_selected = true
-      mustache :history
+      if env['HTTP_X_PJAX']
+        mustache :history, :layout => false
+      else
+        mustache :history
+      end
     end
     
     get '/enqueue/:title_id' do |title_id|

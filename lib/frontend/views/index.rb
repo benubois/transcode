@@ -4,16 +4,9 @@ module Transcode
       
       def queue
         titles = []
-        title = Title.find($redis['transcode:transcoding'])
-        if title
-          disc = Disc.find(title.disc_id)
-          titles << {'name' => disc.name, 'title' => title.title, 'timecode' => title.timecode, 'progress' => title.progress, 'id' => title.id}
-        end
-        queued_titles = Resque.peek('transcode_convert', 0, Resque.size('transcode_convert'))
-        queued_titles.each do |title|
-          title = Title.find(title['args'][0])
-          disc = Disc.find(title.disc_id)
-          titles << {'name' => disc.name, 'title' => title.title, 'timecode' => title.timecode, 'progress' => title.progress, 'id' => title.id}
+        titles << Title.find($redis['transcode:transcoding'])
+        Resque.peek('transcode_convert', 0, Resque.size('transcode_convert')).each do |title|
+          titles << Title.find(title['args'][0])
         end
         titles
       end

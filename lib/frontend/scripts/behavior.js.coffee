@@ -8,6 +8,12 @@ transcode.setDiscHeight = () ->
   )
 
 transcode.init = 
+  nav: () ->
+    $('nav a').pjax('.main').on('click', (e) ->
+      $('nav li').removeClass('selected')
+      $(@).parents('li').addClass('selected')
+    )
+  
   enqueueTitle: () ->
     $('.discs').on 'click', 'a:not(.selected)', (e) ->
       $(@).addClass('selected')

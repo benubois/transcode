@@ -40,6 +40,12 @@ module Transcode
     # Public: Returns the id of the parent disc
     attr_accessor :disc_id
     
+    # Public: Gets and sets the name of the disc
+    attr_accessor :disc_name
+    
+    # Public: Gets and sets the name of the disc
+    attr_accessor :disc_path
+    
     def initialize(options)
       @id             = options['id']
       @title          = options['title']
@@ -53,6 +59,8 @@ module Transcode
       @blocks         = options['blocks']
       @auto_transcode = options['auto_transcode']
       @disc_id        = options['disc_id']
+      @disc_name      = options['disc_name']
+      @disc_path      = options['disc_path']
     end
     
     # Instantiate new title instance from database
@@ -68,7 +76,7 @@ module Transcode
       titles
     end
     
-    def self.initialize_from_string(disc_id, title)
+    def self.initialize_from_string(disc, title)
       options = {}
       options['title']          = title.match(/^([0-9]+):/)[1].to_i
       options['timecode']       = title.match(/\+ duration: (.*)/)[1]
@@ -78,15 +86,17 @@ module Transcode
       options['transcoded']     = false
       options['progress']       = 0
       options['blocks']         = title.scan(/([0-9]+) blocks,/).flatten.map{|block| block.to_i }
-      options['id']             = "#{disc_id}:title:#{options['title']}"
-      options['disc_id']        = disc_id
+      options['id']             = "#{disc['id']}:title:#{options['title']}"
+      options['disc_id']        = disc['id']
+      options['disc_name']      = disc['name']
+      options['disc_path']      = disc['path']
       options['auto_transcode'] = nil
       Title.new(options)
     end
     
-    def self.get_titles_from_string(disc_id, info)
+    def self.get_titles_from_string(disc, info)
       # split by title and remove first
-      info.split(/^\+ title /m)[1..-1].map { |title| initialize_from_string(disc_id, title) }
+      info.split(/^\+ title /m)[1..-1].map { |title| initialize_from_string(disc, title) }
     end
     
     def self.timecode_to_seconds(timecode)
