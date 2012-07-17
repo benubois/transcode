@@ -32,3 +32,12 @@ The transcode front-end will be available at [localhost:5050](http://localhost:5
 ## HandBrake Conversion Settings
 Transcode uses HandBrakeCLI to transcode video from DVD to H.264 encoded m4v. The settings are the same as the High Profile option with a few additions to include forced subtitles.
 
+## Screenshots
+
+**Queue View**
+
+<img src="https://dl.dropbox.com/u/16657547/transcode_queue.png" width="500" height="337" />
+
+**History View**
+
+<img src="https://dl.dropbox.com/u/16657547/transcode_history.png" width="500" height="337" />
