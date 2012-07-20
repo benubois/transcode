@@ -38,6 +38,13 @@ module Transcode
       { :success => true }.to_json
     end
     
+    get '/unqueue/:title_id' do |title_id|
+      $redis.hset(title_id, 'queued', 'false')
+      $redis.lrem('resque:queue:transcode_convert', 1, '{"class":"Transcode::ConvertJob","args":["' + title_id + '"]}')
+      content_type :json
+      { :success => true }.to_json
+    end
+    
     delete '/disc/:id' do |id|
       Resque.enqueue(DeleteJob, id)
       content_type :json

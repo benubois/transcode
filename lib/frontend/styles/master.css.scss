@@ -83,56 +83,29 @@ td {
 	}	
 }
 /*------------------------------------------------------------------------------
- Queue
+ List
 ------------------------------------------------------------------------------*/
-.queue {
+.list {
 	margin: 0;
 	padding: 0;
 	li {
+		padding: 7px 10px 10px 10px;
+		-webkit-transform: translate3d(0, 0, 0);
 		list-style-type: none;
 		border-bottom: 1px solid #99a9ba;
 		font-weight: bold;
-		.wrap {
-			-webkit-box-orient: horizontal;
-			display: -webkit-box;
-			-webkit-box-flex: 1;
-			width: 100%;
-			height: 100%;
-		}
-		.content-wrap {
-			display: -webkit-box;
-			-webkit-box-flex: 1;
-			-webkit-box-ordinal-group: 1;
-			height: 100%;
-		}
-		.control {
-			display: -webkit-box;
-			-webkit-box-flex: 0;
-			-webkit-box-ordinal-group: 2;	
-			overflow: hidden;
-			width: 1px;
-		}
-		.content-wrap {
-			width: 100%;
-		}
-		.content {
-			width: 100%;
-		}
-		.content-inner {
-			padding: 7px 10px 10px 10px;
-		}
+		position: relative;
+		overflow: hidden;
+	}
+}
+/*------------------------------------------------------------------------------
+ Queue
+------------------------------------------------------------------------------*/
+.queue {
+	li {
 		.name {
 			margin-bottom: 4px;
 			position: relative;
-		}
-		.progress {
-			display: block;
-			height: 6px;
-			border-radius: 4px;
-			border-color: #99A9BA;
-			.progress-inner {
-				border-radius: 4px 0 0 4px;
-			}
 		}
 		.meta {
 			font-size: 13px;
@@ -144,41 +117,22 @@ td {
 			font-weight: normal;
 			padding-left: 5px;
 		}
+		.progress {
+			display: block;
+			height: 6px;
+			border-radius: 4px;
+			border-color: #99A9BA;
+			.progress-inner {
+				border-radius: 4px 0 0 4px;
+			}
+		}
 	}
 }
-
 
 /*------------------------------------------------------------------------------
  History
 ------------------------------------------------------------------------------*/
 .discs {
-	margin: 0;
-	padding: 0;
-	li {
-		-webkit-transform: translate3d(0, 0, 0);
-	    overflow: hidden;
-		border-bottom: 1px solid #99a9ba;
-		&.animated {
-			-webkit-transition: all 300ms linear;
-			-webkit-transition-duration: 300ms;
-			-webkit-transform: translate3d(-100%,0,0);
-			height: 0 !important;
-		}
-	}
-	.disc {
-		padding: 7px 20px 0 10px;
-		list-style-type: none;
-		font-weight: bold;
-		position: relative;
-		.delete {
-			position: absolute;
-			top: 8px;
-			right: 10px;
-		}
-		.name {
-			padding-right: 50px;
-		}
-	}
 	.titles {
 		padding: 5px 0 0 0;
 		a {
@@ -189,7 +143,7 @@ td {
 			font-size: 12px;
 			display: block;
 			float: left;
-			padding: 9px 7px 5px 7px;
+			padding: 9px 7px 5px;
 			margin: 0 0 10px 10px;
 			border: 1px solid #c2ced7;
 			color: #516373;
@@ -210,6 +164,42 @@ td {
 		}
 	}
 }
+/*------------------------------------------------------------------------------
+ Delete
+------------------------------------------------------------------------------*/
+.wrap {
+	-webkit-box-orient: horizontal;
+	display: -webkit-box;
+	-webkit-box-flex: 1;
+	width: 100%;
+}
+.content {
+	-webkit-box-flex: 1;
+	-webkit-box-ordinal-group: 1;
+}
+.sidebar {
+	overflow: hidden;
+	width: 0px;
+	display: -webkit-box;
+	-webkit-box-orient: horizontal;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+}
+.button-delete {
+	background: -webkit-linear-gradient(#be515e, #a20716);
+	-webkit-border-radius: 4px;
+	color: #FFF;
+	text-decoration: none;
+	padding: 6px 6px 8px 6px;
+	border-top: 1px solid #7c0000;
+}
+.animation-delete {
+	-webkit-transition: all 300ms linear;
+	-webkit-transition-duration: 300ms;
+	-webkit-transform: translate3d(-100%,0,0);
+	height: 0 !important;
+}
+
 /*------------------------------------------------------------------------------
  Helpers
 ------------------------------------------------------------------------------*/

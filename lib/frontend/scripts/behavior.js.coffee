@@ -1,11 +1,29 @@
 window.transcode = window.transcode || {}
 
-transcode.setDiscHeight = () ->
-  $('.discs li').height(() ->
+transcode.setRowHeights = () ->
+  $('.list li').each(() -> 
     $(@).removeAttr('style')
     $(@).css
       height: "#{$(@).height()}px"
   )
+
+transcode.delete = (element) ->
+  container = $(element).parents('li')
+  container.addClass('animation-delete')
+  # Remove element after animation is complete
+  window.setTimeout(() ->
+    container.remove()
+  , 300)
+
+transcode.hideDelete = (element) ->
+  $('.sidebar', element).parents('li').removeClass('open')
+  $('.sidebar', element).animate({width: '0'}, 300, () -> transcode.setRowHeights())
+
+transcode.showDelete = (element) ->
+  $('.sidebar').css({width: 0})
+  $('.sidebar').parents('li').removeClass('open')
+  $('.sidebar', element).parents('li').addClass('open')
+  $('.sidebar', element).animate({ width: '72px' }, 300, () -> transcode.setRowHeights())
 
 transcode.init = 
   nav: () ->
@@ -16,19 +34,17 @@ transcode.init =
   
   enqueueTitle: () ->
     $('.discs').on 'click', 'a', (e) ->
-      if $(@).not('.selected')
+      if $(@).hasClass('selected')
+        $(@).removeClass('selected')
+        $.get $(@).data('unqueue')
+      else
         $(@).addClass('selected')
-        $.get $(@).attr('href')
+        $.get $(@).data('enqueue')
       e.preventDefault()
   
   deleteMovie: () ->
-    $('.discs').on 'click', 'button', (e) ->
-      container = $(@).parents('li')
-      container.addClass('animated')
-      # Remove element after animation is complete
-      window.setTimeout(() ->
-        container.remove()
-      , 300)
+    $('.discs').on 'click', '.button-delete', (e) ->
+      transcode.delete(@)
       form = $(@).parents('form')
       $.ajax
         type: form.attr('method'),
@@ -37,20 +53,27 @@ transcode.init =
       e.preventDefault()
   
   discHeight: () ->
-    transcode.setDiscHeight()
+    transcode.setRowHeights()
     $(window).resize(() ->
-      transcode.setDiscHeight()
+      transcode.setRowHeights()
     )
   
   unQueue: () ->
-    $('.queue li').on 'swipeone click', (e) ->
-      $('.unqueue-wrap', @).css(
-        width: .001, display: 'block'
-      ).animate({
-        width: '150px'
-      },
-        1000
-      )
+    $('.queue').on 'click', '.button-delete', (e) ->
+      transcode.delete(@)
+      $.get $(@).attr('href')
+      false
+  
+  delete: () ->
+    $('.list li').on 'swipeone', (e) ->
+      if $(@).hasClass('open')
+        transcode.hideDelete(@)
+      else
+        transcode.showDelete(@)
+    
+    $('.list').on 'click', (e) ->
+        transcode.hideDelete(@)
+        
 
 $(document).ready () ->
   $.each(transcode.init, (i, item)->

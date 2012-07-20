@@ -1,25 +1,21 @@
-<ul class="queue">
+<ul class="queue list">
 	{{#queue}}
 	<li data-id="{{id}}">
+		
 		<div class="wrap">
-			<div class="content-wrap">
-				<div class="content">
-					<div class="content-inner">
-						<div class="name">
-							{{disc_name}}asdf
-						</div>
-						<div class="meta">
-							Title {{title}} 
-							<span class="meta-light">{{timecode}}</span>
-						</div>
-						{{>progress}}
-					</div>
+			<div class="content">			
+				<div class="name">{{disc_name}}</div>
+				<div class="meta">
+					Title {{title}} 
+					<span class="meta-light">{{timecode}}</span>
 				</div>
+				{{>progress}}
 			</div>
-			<div class="control">
-				<a href="/unqueue/{{id}}">Unqueue</a>
-			</div>
+			<div class="sidebar">
+				<a href="/unqueue/{{id}}" class="button-delete">Delete</a>
+			</div>			
 		</div>
+
 	</li>
 	{{/queue}}
 	{{^queue}}

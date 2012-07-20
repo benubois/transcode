@@ -1,25 +1,31 @@
-<ul class="discs">
+<ul class="discs list">
 {{#discs}}
 	<li>
-		<div class="disc">
-			<div class="name">{{name}}</div>
-			<div class="delete">
+			
+		<div class="wrap">
+			<div class="content">
+					
+				<div class="name">{{name}}</div>
+				<div class="titles">
+					<div class="row clearfix">
+						{{#titles}}
+							<a data-enqueue="/enqueue/{{id}}" data-unqueue="/unqueue/{{id}}" {{#queued}}class="selected"{{/queued}} data-id="{{id}}">
+								{{timecode}}
+								{{>progress}}
+							</a>
+						{{/titles}}
+					</div>
+				</div>
+					
+			</div>
+			<div class="sidebar">
 				<form action="/disc/{{id}}" method="post">
 					<input name="_method" type="hidden" value="delete" />
-					<button>Delete</button>
+					<a class="button-delete">Delete</a>
 				</form>
-			</div>
-			<div class="titles">
-				<div class="row clearfix">
-					{{#titles}}
-						<a href="/enqueue/{{id}}" {{#queued}}class="selected"{{/queued}} data-id="{{id}}">
-							{{timecode}}
-							{{>progress}}
-						</a>
-					{{/titles}}
-				</div>
-			</div>
+			</div>			
 		</div>
+			
 	</li>
 {{/discs}}
 </ul>
