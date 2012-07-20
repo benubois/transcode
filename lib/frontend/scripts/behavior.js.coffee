@@ -15,9 +15,10 @@ transcode.init =
     )
   
   enqueueTitle: () ->
-    $('.discs').on 'click', 'a:not(.selected)', (e) ->
-      $(@).addClass('selected')
-      $.get $(@).attr('href')
+    $('.discs').on 'click', 'a', (e) ->
+      if $(@).not('.selected')
+        $(@).addClass('selected')
+        $.get $(@).attr('href')
       e.preventDefault()
   
   deleteMovie: () ->
@@ -41,6 +42,16 @@ transcode.init =
       transcode.setDiscHeight()
     )
   
+  unQueue: () ->
+    $('.queue li').on 'swipeone click', (e) ->
+      $('.unqueue-wrap', @).css(
+        width: .001, display: 'block'
+      ).animate({
+        width: '150px'
+      },
+        1000
+      )
+
 $(document).ready () ->
   $.each(transcode.init, (i, item)->
     item()

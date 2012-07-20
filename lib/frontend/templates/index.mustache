@@ -1,19 +1,30 @@
 <ul class="queue">
-{{#queue}}
+	{{#queue}}
 	<li data-id="{{id}}">
-		<div class="name">
-			{{disc_name}}
+		<div class="wrap">
+			<div class="content-wrap">
+				<div class="content">
+					<div class="content-inner">
+						<div class="name">
+							{{disc_name}}asdf
+						</div>
+						<div class="meta">
+							Title {{title}} 
+							<span class="meta-light">{{timecode}}</span>
+						</div>
+						{{>progress}}
+					</div>
+				</div>
+			</div>
+			<div class="control">
+				<a href="/unqueue/{{id}}">Unqueue</a>
+			</div>
 		</div>
-		<div class="meta">
-			Title {{title}} 
-			<span class="meta-light">{{timecode}}</span>
-		</div>
-		{{>progress}}
 	</li>
-{{/queue}}
-{{^queue}}
+	{{/queue}}
+	{{^queue}}
 	<li>
 		Nothing in the queue
 	</li>
-{{/queue}}
+	{{/queue}}
 </ul>
