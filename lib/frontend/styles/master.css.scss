@@ -49,7 +49,7 @@ nav {
 			font-weight: bold;
 			border-left: 1px solid transparent;
 			border-right: 1px solid transparent;
-			text-shadow: rgba(0,0,0,.5) 0 2px 0;
+			text-shadow: rgba(0,0,0,.5) 0 1px 0;
 		}
 		&.selected a {
 			background: #245684;
@@ -64,7 +64,6 @@ nav {
 	position:absolute;
 	z-index:1;
 	width:100%;
-	background:#aaa;
 }
 .inner {
 	position:absolute;
