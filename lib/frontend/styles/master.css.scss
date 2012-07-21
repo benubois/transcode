@@ -3,24 +3,32 @@
 ------------------------------------------------------------------------------*/
 html {
 	-webkit-text-size-adjust: none;
+	background: #d3dbe0;
 }
 body {
 	padding: 0;
 	margin: 0;
 	font-family: Helvetica;
-	background: #e2e7ed;
-	-webkit-overflow-scrolling: touch;
+	background: #d3dbe0;
+	-webkit-font-smoothing: antialiased;
+	overflow: scroll;
 }
 body,a {
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 header {
 	background: #3174b3;
-	border-bottom: 1px solid #193a5a;
+	background: -webkit-linear-gradient(#4f7da2, #2e5e86);
+	border-bottom: 1px solid #063056;
 	color: #FFF;
-	text-transform: uppercase;
+	position:fixed; 
+	z-index:2;
+	top:0; 
+	left:0;
+	width: 100%;
 }
 nav {
+	overflow: hidden;
 	ul {
 		float: left;
 		margin: 0;
@@ -28,38 +36,44 @@ nav {
 	}
 	li {
 		list-style-type: none;
-		display: inline;
-		&.selected a {
-			background: #245684;
-		}
-	}
-	a {
-		color: #fff;
-		text-decoration: none;
 		display: block;
 		float: left;
-		padding: 11px 14px;
-		font-size: 14px;
-		font-weight: bold;
+		height: 100%;
+		a {
+			color: #fff;
+			text-decoration: none;
+			display: block;
+			float: left;
+			padding: 11px 14px;
+			font-size: 14px;
+			font-weight: bold;
+			border-left: 1px solid transparent;
+			border-right: 1px solid transparent;
+			text-shadow: rgba(0,0,0,.5) 0 2px 0;
+		}
+		&.selected a {
+			background: #245684;
+			background: -webkit-linear-gradient(#5e89b1, #27567d);
+			border-left: 1px solid #1c486e;
+			border-right: 1px solid #1c486e;
+		}
 	}
 }
-table {
-	margin: 0;
-	padding: 0;
-    max-width: 100%;
-	width: 100%;
-    background-color: transparent;
-    border-collapse: collapse;
-    border-spacing: 0;
-}
-td {
-	overflow: hidden;
-	white-space: nowrap;
-	padding: 0;
-	margin: 0;
-}
 .main {
-	border-top: 1px solid #FFF;
+	top: 40px;
+	position:absolute;
+	z-index:1;
+	width:100%;
+	background:#aaa;
+}
+.inner {
+	position:absolute;
+	top: 0;
+	z-index:1;
+	width: 100%;
+	padding:0;
+	-webkit-overflow-scrolling: touch;
+	overflow:auto;
 }
 /*------------------------------------------------------------------------------
  Progress
