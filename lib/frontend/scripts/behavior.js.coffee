@@ -16,13 +16,13 @@ transcode.delete = (element) ->
   , 300)
 
 transcode.hideDelete = (element) ->
-  $('.sidebar', element).parents('li').removeClass('open')
+  $('.sidebar', element).parents('li').data('state', '')
   $('.sidebar', element).animate({width: '0'}, 300, () -> transcode.setRowHeights())
 
 transcode.showDelete = (element) ->
   $('.sidebar').css({width: 0})
-  $('.sidebar').parents('li').removeClass('open')
-  $('.sidebar', element).parents('li').addClass('open')
+  $('.sidebar', element).parents('li').data('state', '')
+  $('.sidebar', element).parents('li').data('state', 'open')
   $('.sidebar', element).animate({ width: '72px' }, 300, () -> transcode.setRowHeights())
 
 transcode.init = 
@@ -33,7 +33,7 @@ transcode.init =
     )
   
   enqueueTitle: () ->
-    $('.main').on 'click', '.enqueue', (e) ->
+    $('body').on 'click', '[data-behavior="enqueue"]', (e) ->
       if $(@).hasClass('selected')
         $(@).removeClass('selected')
         $.get $(@).data('unqueue')
@@ -43,7 +43,7 @@ transcode.init =
       e.preventDefault()
   
   deleteMovie: () ->
-    $('.main').on 'click', '.discs .button-delete', (e) ->
+    $('body').on 'click', '[data-behavior="delete-disc"]', (e) ->
       transcode.delete(@)
       form = $(@).parents('form')
       $.ajax
@@ -58,15 +58,15 @@ transcode.init =
       transcode.setRowHeights()
     )
   
-  unQueue: () ->
-    $('.main').on 'click', '.queue .button-delete', (e) ->
+  unqueue: () ->
+    $('body').on 'click', '[data-behavior="unqueue"]', (e) ->
       transcode.delete(@)
       $.get $(@).attr('href')
       false
   
   delete: () ->
-    $('.main').on 'swipe', 'li', (e) ->
-      if $(@).hasClass('open')
+    $('body').on 'rightSwipe leftSwipe', '[data-behavior="swipeable"]', (e) ->
+      if $(@).data('state') is 'open'
         transcode.hideDelete(@)
       else
         transcode.showDelete(@)

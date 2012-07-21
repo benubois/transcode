@@ -1,6 +1,6 @@
 <ul class="discs list">
 {{#discs}}
-	<li>
+	<li data-behavior="swipeable">
 			
 		<div class="wrap">
 			<div class="content">
@@ -9,7 +9,13 @@
 				<div class="titles">
 					<div class="row clearfix">
 						{{#titles}}
-							<a data-enqueue="/enqueue/{{id}}" data-unqueue="/unqueue/{{id}}" class="enqueue {{#queued}}selected{{/queued}}" data-id="{{id}}">
+							<a 
+								data-enqueue="/enqueue/{{id}}"
+								data-unqueue="/unqueue/{{id}}"
+								data-id="{{id}}"
+								data-behavior="enqueue"
+								class="{{#queued}}selected{{/queued}}"
+							>
 								{{timecode}}
 								{{>progress}}
 							</a>
@@ -21,7 +27,7 @@
 			<div class="sidebar">
 				<form action="/disc/{{id}}" method="post">
 					<input name="_method" type="hidden" value="delete" />
-					<a class="button-delete">Delete</a>
+					<a class="button-delete" data-behavior="delete-disc">Delete</a>
 				</form>
 			</div>			
 		</div>

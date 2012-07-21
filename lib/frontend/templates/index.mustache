@@ -1,6 +1,6 @@
 <ul class="queue list">
 	{{#queue}}
-	<li data-id="{{id}}">
+	<li data-id="{{id}}" data-behavior="swipeable">
 		
 		<div class="wrap">
 			<div class="content">			
@@ -12,7 +12,7 @@
 				{{>progress}}
 			</div>
 			<div class="sidebar">
-				<a href="/unqueue/{{id}}" class="button-delete">Delete</a>
+				<a href="/unqueue/{{id}}" class="button-delete" data-behavior="unqueue">Delete</a>
 			</div>			
 		</div>
 
