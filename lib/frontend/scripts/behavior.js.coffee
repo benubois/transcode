@@ -33,7 +33,7 @@ transcode.init =
     )
   
   enqueueTitle: () ->
-    $('.discs').on 'click', 'a', (e) ->
+    $('.main').on 'click', '.enqueue', (e) ->
       if $(@).hasClass('selected')
         $(@).removeClass('selected')
         $.get $(@).data('unqueue')
@@ -43,7 +43,7 @@ transcode.init =
       e.preventDefault()
   
   deleteMovie: () ->
-    $('.discs').on 'click', '.button-delete', (e) ->
+    $('.main').on 'click', '.discs .button-delete', (e) ->
       transcode.delete(@)
       form = $(@).parents('form')
       $.ajax
@@ -59,19 +59,19 @@ transcode.init =
     )
   
   unQueue: () ->
-    $('.queue').on 'click', '.button-delete', (e) ->
+    $('.main').on 'click', '.queue .button-delete', (e) ->
       transcode.delete(@)
       $.get $(@).attr('href')
       false
   
   delete: () ->
-    $('.list li').on 'swipeone', (e) ->
+    $('.main').on 'swipe', 'li', (e) ->
       if $(@).hasClass('open')
         transcode.hideDelete(@)
       else
         transcode.showDelete(@)
     
-    $('.list').on 'click', (e) ->
+    $('.main').on 'click', (e) ->
         transcode.hideDelete(@)
         
 

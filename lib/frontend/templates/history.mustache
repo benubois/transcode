@@ -9,7 +9,7 @@
 				<div class="titles">
 					<div class="row clearfix">
 						{{#titles}}
-							<a data-enqueue="/enqueue/{{id}}" data-unqueue="/unqueue/{{id}}" {{#queued}}class="selected"{{/queued}} data-id="{{id}}">
+							<a data-enqueue="/enqueue/{{id}}" data-unqueue="/unqueue/{{id}}" class="enqueue {{#queued}}selected{{/queued}}" data-id="{{id}}">
 								{{timecode}}
 								{{>progress}}
 							</a>
