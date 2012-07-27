@@ -198,6 +198,9 @@ nav {
 	-webkit-box-pack: center;
 	-webkit-box-align: center;
 }
+.no-touch .sidebar {
+	width: 72px;
+}
 .button-delete {
 	background: -webkit-linear-gradient(#be515e, #a20716);
 	border-radius: 4px;
@@ -205,6 +208,7 @@ nav {
 	text-decoration: none;
 	padding: 6px 6px 8px 6px;
 	border-top: 1px solid #7c0000;
+	cursor: pointer;
 }
 .animation-delete {
 	-webkit-transition: all 300ms linear;

@@ -1,5 +1,3 @@
-window.transcode = window.transcode || {}
-
 transcode.pusher = new Pusher('<%= Transcode.config.pusher_key %>')
 transcode.channel = transcode.pusher.subscribe('progress_updates')
 
