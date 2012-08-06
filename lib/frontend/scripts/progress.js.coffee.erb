@@ -1,5 +1,6 @@
-transcode.pusher = new Pusher('<%= Transcode.config.pusher_key %>')
-transcode.channel = transcode.pusher.subscribe('progress_updates')
+$.extend transcode,
+  pusher: new Pusher('<%= Transcode.config.pusher_key %>'),
+  channel: transcode.pusher.subscribe('progress_updates'),
 
 transcode.channel.bind 'progress', (message) ->
   $("[data-id='#{message.id}']").find(".progress-inner").css({width: "#{message.progress}%"})
