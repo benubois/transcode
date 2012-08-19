@@ -33,7 +33,7 @@ $.extend transcode,
 
   init: 
     nav: () ->
-      $('nav a').pjax('.main').on 'click', (e) ->
+      $('nav a').pjax('.inner').on 'click', (e) ->
         $('nav li').removeClass('selected')
         $(@).parents('li').addClass('selected')
   
