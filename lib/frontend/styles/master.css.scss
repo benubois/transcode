@@ -57,6 +57,9 @@ nav {
 			border-left: 1px solid #1c486e;
 			border-right: 1px solid #1c486e;
 		}
+		&.selected:first-child a {
+			border-left: 1px solid transparent;
+		}
 	}
 }
 .main {

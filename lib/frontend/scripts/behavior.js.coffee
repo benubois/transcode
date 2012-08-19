@@ -77,6 +77,13 @@ $.extend transcode,
     
       $('.main').on 'click', (e) ->
           transcode.hideDelete(@) if Modernizr.touch
+    
+    piecon: () ->
+      Piecon.setOptions
+        color: '#abbdd0',
+        background: '#FFF',
+        shadow: '#8a9daf',
+        fallback: false
         
 $(document).ready () ->
   $.each transcode.init, (i, item) ->

@@ -1,6 +1,10 @@
-$.extend transcode,
-  pusher: new Pusher('<%= Transcode.config.pusher_key %>'),
-  channel: transcode.pusher.subscribe('progress_updates'),
+transcode.pusher = new Pusher('<%= Transcode.config.pusher_key %>')
+transcode.channel = transcode.pusher.subscribe('progress_updates')
 
 transcode.channel.bind 'progress', (message) ->
   $("[data-id='#{message.id}']").find(".progress-inner").css({width: "#{message.progress}%"})
+  if /100/i.test(message.progress)
+    Piecon.reset()
+  else
+    Piecon.setProgress message.progress
+
