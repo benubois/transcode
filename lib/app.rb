@@ -14,22 +14,20 @@ module Transcode
       :views => "#{dir}/frontend/views"
     }
     
+    helpers do
+      def pjax?
+        env['HTTP_X_PJAX'] || false
+      end
+    end
+    
     get '/' do
       @queue_selected = true
-      if env['HTTP_X_PJAX']
-        mustache :index, :layout => false
-      else
-        mustache :index
-      end
+      mustache :index, :layout => !pjax?
     end
     
     get '/history' do
       @history_selected = true
-      if env['HTTP_X_PJAX']
-        mustache :history, :layout => false
-      else
-        mustache :history
-      end
+      mustache :history, :layout => !pjax?
     end
     
     get '/enqueue/:title_id' do |title_id|
