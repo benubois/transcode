@@ -9,13 +9,7 @@
 				<div class="titles">
 					<div class="row clearfix">
 						{{#titles}}
-							<a 
-								data-enqueue="/enqueue/{{id}}"
-								data-unqueue="/unqueue/{{id}}"
-								data-id="{{id}}"
-								data-behavior="enqueue"
-								class="{{#queued}}selected{{/queued}}"
-							>
+							<a href="/toggle_queued/{{id}}" data-id="{{id}}" data-behavior="toggle_queued" class="{{#queued}}selected{{/queued}}">
 								{{timecode}}
 								{{>progress}}
 							</a>

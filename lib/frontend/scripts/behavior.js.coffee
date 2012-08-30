@@ -38,14 +38,10 @@ $.extend transcode,
         $(@).parents('li').addClass('selected')
   
     enqueueTitle: () ->
-      $('body').on 'click', '[data-behavior~=enqueue]', (e) ->
-        if $(@).hasClass('selected')
-          $(@).removeClass('selected')
-          $.get $(@).data('unqueue')
-        else
-          $(@).addClass('selected')
-          $.get $(@).data('enqueue')
-        e.preventDefault()
+      $('body').on 'click', '[data-behavior~=toggle_queued]', (e) ->
+        $(@).toggleClass('selected')
+        $.get $(@).attr('href')
+        e.preventDefault()        
   
     deleteMovie: () ->
       $('body').on 'click', '[data-behavior~=delete-disc]', (e) ->
