@@ -12,6 +12,7 @@ gem 'coffee-script'
 gem 'sass'
 gem 'eventmachine'
 gem 'pusher'
+gem 'iconv'
 
 group :test do
   gem 'resque_spec'
